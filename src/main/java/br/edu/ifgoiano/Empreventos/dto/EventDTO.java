@@ -1,40 +1,48 @@
 package br.edu.ifgoiano.Empreventos.dto;
 
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class EventDTO {
     private Long id;
+
+    @NotBlank(message = "O título é obrigatório.")
     private String titulo;
+
+    @NotBlank(message = "A descrição é obrigatória.")
     private String descricao;
+
+    @NotNull(message = "A data de início é obrigatória.")
+    @FutureOrPresent(message = "A data de início deve ser no presente ou futuro.")
     private LocalDate dataInicio;
+
+    @NotNull(message = "A data de fim é obrigatória.")
+    @FutureOrPresent(message = "A data de fim deve ser no presente ou futuro.")
     private LocalDate dataFim;
+
+    @NotBlank(message = "O local é obrigatório.")
     private String local;
+
+    @PositiveOrZero(message = "A capacidade deve ser um número positivo ou zero.")
     private int capacidade;
+
     private String status;
     private BigDecimal valorInscricao;
     private boolean eventoPago;
+
+    //@NotNull(message = "O ID da empresa organizadora é obrigatório.")
    // private Long empresaOrganizadoraId;
 
     public EventDTO() {
 
     }
 
-    public EventDTO(String titulo, String descricao, LocalDate dataInicio, LocalDate dataFim,
-                    String local, int capacidade, String status, BigDecimal valorInscricao,
-                    boolean eventoPago) {
-        this.titulo = titulo;
-        this.descricao = descricao;
-        this.dataInicio = dataInicio;
-        this.dataFim = dataFim;
-        this.local = local;
-        this.capacidade = capacidade;
-        this.status = status;
-        this.valorInscricao = valorInscricao;
-        this.eventoPago = eventoPago;
-    }
 
-    // Getters e Setters
     public Long getId() {
         return id;
     }
@@ -114,12 +122,4 @@ public class EventDTO {
     public void setEventoPago(boolean eventoPago) {
         this.eventoPago = eventoPago;
     }
-
-  /*  public Long getEmpresaOrganizadoraId() {
-        return empresaOrganizadoraId;
-    }
-
-    public void setEmpresaOrganizadoraId(Long empresaOrganizadoraId) {
-        this.empresaOrganizadoraId = empresaOrganizadoraId;
-    }*/
 }

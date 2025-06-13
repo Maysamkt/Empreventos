@@ -1,14 +1,20 @@
 package br.edu.ifgoiano.Empreventos.model;
 
 import jakarta.persistence.*;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "eventos")
 public class Event implements Serializable {
+
+    @Serial
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -41,20 +47,9 @@ public class Event implements Serializable {
     @Column(name = "pago")
     private boolean eventoPago;
 
-    /* Relacionamentos
-    @ManyToOne
-    @JoinColumn(name = "empresa_organizadora_id")
-    private EmpresaOrganizadora empresaOrganizadora;
-
-    @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Atividade> atividades;
 
-    @OneToMany(mappedBy = "evento")
-    private List<Inscricao> inscricoes;
-
-    @OneToMany(mappedBy = "evento")
-    private List<Avaliacao> avaliacoes;
-*/
 
     public Long getId() {
         return id;
@@ -134,5 +129,13 @@ public class Event implements Serializable {
 
     public void setEventoPago(boolean eventoPago) {
         this.eventoPago = eventoPago;
+    }
+
+    public List<Atividade> getAtividades() {
+        return atividades;
+    }
+
+    public void setAtividades(List<Atividade> atividades) {
+        this.atividades = atividades;
     }
 }

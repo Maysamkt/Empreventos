@@ -1,6 +1,8 @@
 package br.edu.ifgoiano.Empreventos.service;
 
 import br.edu.ifgoiano.Empreventos.dto.EventDTO;
+import br.edu.ifgoiano.Empreventos.dto.EventResponseDTO;
+import br.edu.ifgoiano.Empreventos.exception.RestExceptionHandler;
 import br.edu.ifgoiano.Empreventos.mapper.DataMapper;
 import br.edu.ifgoiano.Empreventos.model.Event;
 import br.edu.ifgoiano.Empreventos.model.StatusEvento;
@@ -9,62 +11,61 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Service
 public class EventService {
 
     @Autowired
     private EventRepository eventRepository;
+    private final Logger logger = Logger.getLogger(EventService.class.getName());
 
-    public List<EventDTO> findAll() {
+    public List<EventResponseDTO> findAll() {
+        logger.info("Encontrando todos os eventos!");
         List<Event> events = eventRepository.findAll();
-        return DataMapper.parseListObjects(events, EventDTO.class);
+        return events.stream()
+                .map(event -> DataMapper.parseObject(event, EventResponseDTO.class))
+                .collect(Collectors.toList());
     }
 
-    public EventDTO findById(Long id) {
-        Optional<Event> event = eventRepository.findById(id);
-        return event.map(e -> DataMapper.parseObject(e, EventDTO.class)).orElse(null);
+    public EventResponseDTO findById(Long id) {
+        logger.info("Encontrando um Evento pelo ID!");
+        var event = eventRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Evento com ID " + id + " não encontrado."));
+        return DataMapper.parseObject(event, EventResponseDTO.class);
     }
 
     public EventDTO create(EventDTO eventDTO) {
-        Event event = DataMapper.parseObject(eventDTO, Event.class);
-        Event savedEvent = eventRepository.save(event);
+        logger.info("Criando um Evento!");
+        var event = DataMapper.parseObject(eventDTO, Event.class);
+        var savedEvent = eventRepository.save(event);
         return DataMapper.parseObject(savedEvent, EventDTO.class);
     }
 
     public EventDTO update(Long id, EventDTO eventDTO) {
-        Optional<Event> existingEvent = eventRepository.findById(id);
-        if (existingEvent.isPresent()) {
-            Event event = DataMapper.parseObject(eventDTO, Event.class);
-            event.setId(id); // mantém o ID original
-            Event updatedEvent = eventRepository.save(event);
-            return DataMapper.parseObject(updatedEvent, EventDTO.class);
+        logger.info("Atualizando um Evento!");
+        var event = eventRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Evento com ID " + id + " não encontrado."));
+        event.setTitulo(eventDTO.getTitulo());
+        event.setDescricao(eventDTO.getDescricao());
+        event.setLocal(eventDTO.getLocal());
+        event.setCapacidade(eventDTO.getCapacidade());
+        event.setDataInicio(eventDTO.getDataInicio());
+        event.setDataFim(eventDTO.getDataFim());
+        if (eventDTO.getStatus() != null) {
+            event.setStatus(StatusEvento.valueOf(eventDTO.getStatus()));
         }
-        return null;
+        event.setEventoPago(eventDTO.isEventoPago());
+        event.setValorInscricao(eventDTO.getValorInscricao());
+        var eventEntity = eventRepository.save(event);
+        return DataMapper.parseObject(eventEntity, EventDTO.class);
     }
 
-    public boolean delete(Long id) {
-        if (eventRepository.existsById(id)) {
-            eventRepository.deleteById(id);
-            return true;
-        }
-        return false;
-    }
-
-    public List<EventDTO> findByStatus(String status) {
-        StatusEvento statusEvento = StatusEvento.valueOf(status);
-        List<Event> events = eventRepository.findByStatus(statusEvento);
-        return DataMapper.parseListObjects(events, EventDTO.class);
-    }
-
-    public List<EventDTO> findByEventoPago(boolean eventoPago) {
-        List<Event> events = eventRepository.findByEventoPago(eventoPago);
-        return DataMapper.parseListObjects(events, EventDTO.class);
-    }
-
-    public List<EventDTO> findByTitulo(String titulo) {
-        List<Event> events = eventRepository.findByTituloContainingIgnoreCase(titulo);
-        return DataMapper.parseListObjects(events, EventDTO.class);
+    public void delete(Long id) {
+        logger.info("Excluindo evento");
+        var event = eventRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Evento com ID " + id + " não encontrado."));
+        eventRepository.delete(event);
     }
 }
