@@ -3,7 +3,7 @@ package br.edu.ifgoiano.Empreventos.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class AtividadeResponseDTO {
+public class ActivityResponseDTO {
     private Long id;
     private String titulo;
     private String tipoAtividade;

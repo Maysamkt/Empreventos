@@ -1,6 +1,6 @@
 package br.edu.ifgoiano.Empreventos.controller;
 
-import br.edu.ifgoiano.Empreventos.dto.MaterialComplementarDTO;
+import br.edu.ifgoiano.Empreventos.dto.ComplementaryMaterialDTO;
 import br.edu.ifgoiano.Empreventos.service.MaterialComplementarService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/atividades/{activityId}/materiais")
 public class MaterialComplementarController {
 
     @Autowired
@@ -20,20 +20,20 @@ public class MaterialComplementarController {
 
     @PostMapping("/atividades/{atividadeId}/materiais")
     @ResponseStatus(HttpStatus.CREATED)
-    public MaterialComplementarDTO addMaterial(
-            @PathVariable Long atividadeId,
-            @Valid @RequestBody MaterialComplementarDTO materialDTO) {
-        return materialService.create(atividadeId, materialDTO);
+    public ComplementaryMaterialDTO addMaterial(
+            @PathVariable Integer ActivityId,
+            @Valid @RequestBody ComplementaryMaterialDTO materialDTO) {
+        return materialService.create(ActivityId, materialDTO);
     }
 
     @GetMapping("/atividades/{atividadeId}/materiais")
-    public List<MaterialComplementarDTO> findMateriaisPorAtividade(@PathVariable Long atividadeId) {
-        return materialService.findByAtividadeId(atividadeId);
+    public List<ComplementaryMaterialDTO> findMateriaisPorAtividade(@PathVariable Integer ActivityId) {
+        return materialService.findByAtividadeId(ActivityId);
     }
 
 
     @DeleteMapping("/materiais/{materialId}")
-    public ResponseEntity<?> deleteMaterial(@PathVariable Long materialId) {
+    public ResponseEntity<?> deleteMaterial(@PathVariable Integer materialId) {
         materialService.delete(materialId);
         return ResponseEntity.noContent().build();
     }

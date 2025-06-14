@@ -11,24 +11,16 @@ public class AtividadeDTO {
     private Long id;
 
     @NotBlank(message = "O título da atividade é obrigatório.")
-    private String titulo;
-    private String descricao;
+    private String title;
+    private String description;
 
     @NotNull(message = "A data e hora de início são obrigatórias.")
     @Future(message = "A data de início deve ser no futuro.")
-    private LocalDateTime dataHoraInicio;
+    private LocalDateTime startDateTime;
 
     @NotNull(message = "A data e hora de fim são obrigatórias.")
     @Future(message = "A data de fim deve ser no futuro.")
-    private LocalDateTime dataHoraFim;
-
-    @NotBlank(message = "O tipo da atividade é obrigatório")
-    private String tipoAtividade;
-
-    @NotNull(message = "A capacidade é obrigatória.")
-    @PositiveOrZero(message = "A capacidade não pode ser um número negativo.")
-    private int capacidade;
-
+    private LocalDateTime endDateTime;
 
     public Long getId() {
         return id;
@@ -38,36 +30,36 @@ public class AtividadeDTO {
         this.id = id;
     }
 
-    public String getTitulo() {
-        return titulo;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public LocalDateTime getDataHoraInicio() {
-        return dataHoraInicio;
+    public LocalDateTime getStartDateTime() {
+        return startDateTime;
     }
 
-    public void setDataHoraInicio(LocalDateTime dataHoraInicio) {
-        this.dataHoraInicio = dataHoraInicio;
+    public void setStartDateTime(LocalDateTime startDateTime) {
+        this.startDateTime = startDateTime;
     }
 
-    public LocalDateTime getDataHoraFim() {
-        return dataHoraFim;
+    public LocalDateTime getEndDateTime() {
+        return endDateTime;
     }
 
-    public void setDataHoraFim(LocalDateTime dataHoraFim) {
-        this.dataHoraFim = dataHoraFim;
+    public void setEndDateTime(LocalDateTime endDateTime) {
+        this.endDateTime = endDateTime;
     }
 
     public String getTipoAtividade() {
