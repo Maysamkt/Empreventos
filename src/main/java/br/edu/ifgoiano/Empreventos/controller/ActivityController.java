@@ -24,7 +24,6 @@ public class ActivityController {
 
     @PutMapping("/{id}")
     public ActivityDTO update(
-            // CORRIGIDO: Long para Integer
             @PathVariable Integer id,
             @Valid @RequestBody ActivityDTO atividadeDTO) {
         return activityService.update(id, atividadeDTO);

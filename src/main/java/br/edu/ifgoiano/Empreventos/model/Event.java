@@ -1,5 +1,6 @@
 package br.edu.ifgoiano.Empreventos.model;
 
+import br.edu.ifgoiano.Empreventos.util.EventStatus;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -61,10 +62,10 @@ public class Event implements Serializable {
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<Activity> activities;
 
-    //relacionamentos quando as entidades existirem
-    // @ManyToOne(fetch = FetchType.LAZY)
-    // @JoinColumn(name = "organizer_id") // Você precisará adicionar esta coluna no seu SQL
-    // private User organizer;
+
+     @ManyToOne(fetch = FetchType.LAZY)
+     @JoinColumn(name = "organizer_id")
+     private User organizer;
 
     public Integer getId() {
         return id;
@@ -168,5 +169,13 @@ public class Event implements Serializable {
 
     public void setActivities(List<Activity> activities) {
         this.activities = activities;
+    }
+
+    public User getOrganizer() {
+        return organizer;
+    }
+
+    public void setOrganizer(User organizer) {
+        this.organizer = organizer;
     }
 }

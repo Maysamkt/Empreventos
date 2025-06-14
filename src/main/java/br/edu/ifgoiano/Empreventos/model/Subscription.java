@@ -1,5 +1,6 @@
 package br.edu.ifgoiano.Empreventos.model;
 
+import br.edu.ifgoiano.Empreventos.util.SubscriptionStatus;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;

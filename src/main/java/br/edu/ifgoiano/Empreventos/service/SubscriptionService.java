@@ -4,7 +4,7 @@ import br.edu.ifgoiano.Empreventos.dto.SubscriptionDTO;
 import br.edu.ifgoiano.Empreventos.dto.SubscriptionResponseDTO;
 import br.edu.ifgoiano.Empreventos.mapper.DataMapper;
 import br.edu.ifgoiano.Empreventos.model.Subscription;
-import br.edu.ifgoiano.Empreventos.model.SubscriptionStatus;
+import br.edu.ifgoiano.Empreventos.util.SubscriptionStatus;
 import br.edu.ifgoiano.Empreventos.model.User;
 import br.edu.ifgoiano.Empreventos.repository.EventRepository;
 import br.edu.ifgoiano.Empreventos.repository.SubscriptionRepository;
@@ -28,6 +28,8 @@ public class SubscriptionService {
     @Autowired
     private UserRepository userRepository;
 
+    private  Subscription subscription;
+
     @Transactional
     public SubscriptionResponseDTO create(SubscriptionDTO subscriptionDTO) {
         var event = eventRepository.findById(subscriptionDTO.getEventId())
@@ -37,9 +39,9 @@ public class SubscriptionService {
         var listener = userRepository.findById(subscriptionDTO.getListenerId())
                 .orElseThrow(() -> new NoSuchElementException("Usuário (participante) não encontrado com o ID: " + subscriptionDTO.getListenerId()));
 
-        Subscription subscription = new Subscription();
+
         subscription.setEvent(event);
-        subscription.setListener((User) listener);
+        subscription.setListener(listener);
         subscription.setAmountPaid(subscriptionDTO.getAmountPaid());
         subscription.setStatus(SubscriptionStatus.PENDING);
 

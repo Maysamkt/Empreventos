@@ -9,9 +9,4 @@ import java.util.List;
 @Repository
 public interface SubscriptionRepository extends JpaRepository<Subscription, Integer> {
 
-    // Encontra todas as inscrições para um determinado evento
-    List<Subscription> findByEventId(Integer eventId);
-
-    // Encontra todas as inscrições de um determinado participante (ouvinte)
-    List<Subscription> findByListenerId(Integer listenerId);
 }

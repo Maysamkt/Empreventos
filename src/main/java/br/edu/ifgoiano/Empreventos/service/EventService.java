@@ -4,7 +4,7 @@ import br.edu.ifgoiano.Empreventos.dto.EventDTO;
 import br.edu.ifgoiano.Empreventos.dto.EventResponseDTO;
 import br.edu.ifgoiano.Empreventos.mapper.DataMapper;
 import br.edu.ifgoiano.Empreventos.model.Event;
-import br.edu.ifgoiano.Empreventos.model.EventStatus;
+import br.edu.ifgoiano.Empreventos.util.EventStatus;
 import br.edu.ifgoiano.Empreventos.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 @Service
 public class EventService {

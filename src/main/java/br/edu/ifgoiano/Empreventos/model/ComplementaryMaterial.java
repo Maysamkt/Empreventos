@@ -1,5 +1,6 @@
 package br.edu.ifgoiano.Empreventos.model;
 
+import br.edu.ifgoiano.Empreventos.util.MaterialType;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -46,6 +47,8 @@ public class ComplementaryMaterial implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "activity_id", nullable = false)
     private Activity activity;
+
+
 
     public Integer getId() {
         return id;

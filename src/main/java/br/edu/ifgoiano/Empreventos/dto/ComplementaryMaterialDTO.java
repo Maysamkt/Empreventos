@@ -1,8 +1,7 @@
 package br.edu.ifgoiano.Empreventos.dto;
 
-import br.edu.ifgoiano.Empreventos.model.MaterialType;
+import br.edu.ifgoiano.Empreventos.util.MaterialType;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.URL;
 
 public class ComplementaryMaterialDTO {

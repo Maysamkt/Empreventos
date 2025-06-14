@@ -32,11 +32,10 @@ public class RatingService {
     }
 
     public List<RatingDTO> findBySubscriptionId(Integer subscriptionId) {
-        var ratings = ratingRepository.findBySubscriptionId(subscriptionId); // O método no repositório precisa ser criado
+        var ratings = ratingRepository.findBySubscriptionId(subscriptionId);
         return DataMapper.parseListObjects(ratings, RatingDTO.class);
     }
 
-    // Você também precisará de um método para deletar e atualizar, se necessário.
     public void delete(Integer ratingId) {
         var rating = ratingRepository.findById(ratingId)
                 .orElseThrow(() -> new NoSuchElementException("Avaliação com ID " + ratingId + " não encontrada."));

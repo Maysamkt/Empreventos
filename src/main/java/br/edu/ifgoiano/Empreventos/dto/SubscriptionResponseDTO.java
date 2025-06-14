@@ -13,7 +13,7 @@ public class SubscriptionResponseDTO {
     private Integer listenerId;
     private String listenerName;
 
-    // Getters e Setters
+
     public Integer getId() {
         return id;
     }

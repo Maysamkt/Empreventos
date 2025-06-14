@@ -1,4 +1,4 @@
-package br.edu.ifgoiano.Empreventos.model;
+package br.edu.ifgoiano.Empreventos.util;
 
 public enum MaterialType {
     PDF,
