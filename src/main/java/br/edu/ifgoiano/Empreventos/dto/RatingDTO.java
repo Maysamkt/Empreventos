@@ -5,9 +5,12 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public class AvaliacaoDTO {
+public class RatingDTO {
 
-    private Long id;
+    private Integer id;
+
+    @NotNull(message = "O ID da inscrição é obrigatório.")
+    private Integer subscriptionId;
 
     @NotNull(message = "A nota é obrigatória.")
     @Min(value = 1, message = "A nota mínima é 1.")
@@ -15,15 +18,15 @@ public class AvaliacaoDTO {
     private int score;
 
     @Size(max = 500, message = "O comentário não pode exceder 500 caracteres.")
-    private String commet;
+    private String comment;
 
 
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -35,11 +38,11 @@ public class AvaliacaoDTO {
         this.score = score;
     }
 
-    public String getCommet() {
-        return commet;
+    public String getComment() {
+        return comment;
     }
 
-    public void setCommet(String commet) {
-        this.commet = commet;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

@@ -1,4 +1,7 @@
 package br.edu.ifgoiano.Empreventos.model;
 
-public class SubscriptionStatus {
+public enum SubscriptionStatus {
+    PENDING,
+    CONFIRMED,
+    CANCELED
 }

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
-public class MaterialComplementarService {
+public class ComplementaryMaterialService {
 
     @Autowired
     private ComplementaryMaterialRepository complementaryMaterialRepository;
@@ -21,11 +21,14 @@ public class MaterialComplementarService {
     @Autowired
     private ActivityRepository activityRepository;
 
-    public ComplementaryMaterialDTO create(Integer ActivityId, ComplementaryMaterialDTO materialDTO) {
-        var Activity = activityRepository.findById(ActivityId)
-                .orElseThrow(() -> new NoSuchElementException("Activity não encontrada com o ID: " + ActivityId));
+
+    public ComplementaryMaterialDTO create(ComplementaryMaterialDTO materialDTO) {
+        var activity = activityRepository.findById(materialDTO.getActivityId())
+                .orElseThrow(() -> new NoSuchElementException("Activity not found with ID: " + materialDTO.getActivityId()));
+
         var material = DataMapper.parseObject(materialDTO, ComplementaryMaterial.class);
-        material.setActivity(Activity);
+        material.setActivity(activity);
+
         var savedMaterial = complementaryMaterialRepository.save(material);
         return DataMapper.parseObject(savedMaterial, ComplementaryMaterialDTO.class);
     }

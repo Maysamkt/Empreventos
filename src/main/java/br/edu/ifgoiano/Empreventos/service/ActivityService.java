@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
-public class AtividadeService {
+public class ActivityService {
 
     @Autowired
     private ActivityRepository activityRepository;
@@ -23,11 +23,13 @@ public class AtividadeService {
     private EventRepository eventRepository;
 
 
-    public ActivityDTO create(Integer eventId, ActivityDTO activityDTO) {
-        var event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new NoSuchElementException("Evento não encontrado com o ID: " + eventId));
+    public ActivityDTO create (ActivityDTO activityDTO) {
+        var event = eventRepository.findById(activityDTO.getEventId())
+                .orElseThrow(() -> new NoSuchElementException("Evento não encontrado com o ID: " + activityDTO.getEventId()));
+
         var activity = DataMapper.parseObject(activityDTO, Activity.class);
         activity.setEvent(event);
+
         var savedActivity = activityRepository.save(activity);
         return DataMapper.parseObject(savedActivity, ActivityDTO.class);
     }
@@ -43,6 +45,14 @@ public class AtividadeService {
         return DataMapper.parseListObjects(activities, ActivityResponseDTO.class);
     }
 
+
+    public void delete(Integer activityId) {
+        var activity = activityRepository.findById(activityId)
+                .orElseThrow(() -> new NoSuchElementException("Atividade com ID " + activityId + " não encontrada."));
+        activity.setDeletedAt(LocalDateTime.now());
+        activityRepository.save(activity);
+    }
+
     public ActivityDTO update(Integer activityId, ActivityDTO activityDTO) {
         var activity = activityRepository.findById(activityId)
                 .orElseThrow(() -> new NoSuchElementException("Atividade com ID " + activityId + " não encontrada."));
@@ -56,12 +66,5 @@ public class AtividadeService {
 
         var savedActivity = activityRepository.save(activity);
         return DataMapper.parseObject(savedActivity, ActivityDTO.class);
-    }
-
-    public void delete(Integer activityId) {
-        var activity = activityRepository.findById(activityId)
-                .orElseThrow(() -> new NoSuchElementException("Atividade com ID " + activityId + " não encontrada."));
-        activity.setDeletedAt(LocalDateTime.now());
-        activityRepository.save(activity);
     }
 }

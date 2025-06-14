@@ -9,8 +9,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "rating") // ALTERADO
-@Where(clause = "deleted_at IS NULL") // NOVO
+@Table(name = "rating")
+@Where(clause = "deleted_at IS NULL")
 public class Rating implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -19,12 +19,11 @@ public class Rating implements Serializable {
     private Integer id;
 
     @Column(nullable = false)
-    private int score; // ALTERADO
+    private int score;
 
     @Column(columnDefinition = "TEXT")
-    private String comment; // ALTERADO
+    private String comment;
 
-    // --- NOVOS CAMPOS DE AUDITORIA ---
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -36,13 +35,10 @@ public class Rating implements Serializable {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    // --- RELACIONAMENTO PRINCIPAL (MUDANÇA CRÍTICA) ---
-    // TODO: Descomentar e implementar quando a entidade Subscription.java for criada
-    // @OneToOne // Ou ManyToOne, dependendo da regra de negócio
-    // @JoinColumn(name = "subscription_id", nullable = false)
-    // private Subscription subscription;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "subscription_id", nullable = false)
+    private Subscription subscription;
 
-    // Getters e Setters...
     public Integer getId() {
         return id;
     }
@@ -89,5 +85,13 @@ public class Rating implements Serializable {
 
     public void setDeletedAt(LocalDateTime deletedAt) {
         this.deletedAt = deletedAt;
+    }
+
+    public Subscription getSubscription() {
+        return subscription;
+    }
+
+    public void setSubscription(Subscription subscription) {
+        this.subscription = subscription;
     }
 }

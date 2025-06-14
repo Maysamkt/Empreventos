@@ -3,12 +3,13 @@ package br.edu.ifgoiano.Empreventos.dto;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PositiveOrZero;
 
 import java.time.LocalDateTime; // ALTERADO
 
-public class AtividadeDTO {
-    private Long id;
+public class ActivityDTO {
+    private Integer id;
+
+    private Integer eventId;
 
     @NotBlank(message = "O título da atividade é obrigatório.")
     private String title;
@@ -22,11 +23,24 @@ public class AtividadeDTO {
     @Future(message = "A data de fim deve ser no futuro.")
     private LocalDateTime endDateTime;
 
-    public Long getId() {
+    private String location;
+    private Integer hoursCertified;
+    private boolean isPublished;
+
+
+    public Integer getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(Integer eventId) {
+        this.eventId = eventId;
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -62,19 +76,27 @@ public class AtividadeDTO {
         this.endDateTime = endDateTime;
     }
 
-    public String getTipoAtividade() {
-        return tipoAtividade;
+    public String getLocation() {
+        return location;
     }
 
-    public void setTipoAtividade(String tipoAtividade) {
-        this.tipoAtividade = tipoAtividade;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
-    public int getCapacidade() {
-        return capacidade;
+    public Integer getHoursCertified() {
+        return hoursCertified;
     }
 
-    public void setCapacidade(int capacidade) {
-        this.capacidade = capacidade;
+    public void setHoursCertified(Integer hoursCertified) {
+        this.hoursCertified = hoursCertified;
+    }
+
+    public boolean isPublished() {
+        return isPublished;
+    }
+
+    public void setPublished(boolean published) {
+        isPublished = published;
     }
 }

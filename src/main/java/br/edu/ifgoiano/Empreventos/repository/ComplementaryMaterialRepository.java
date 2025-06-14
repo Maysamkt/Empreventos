@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-// ALTERADO: Classe e ID
+
 public interface ComplementaryMaterialRepository extends JpaRepository<ComplementaryMaterial, Integer> {
-    List<ComplementaryMaterial> findByActivityId(Integer activityId); // ALTERADO
+    List<ComplementaryMaterial> findByActivityId(Integer activityId);
 }

@@ -1,7 +1,7 @@
 package br.edu.ifgoiano.Empreventos.controller;
 
 import br.edu.ifgoiano.Empreventos.dto.ComplementaryMaterialDTO;
-import br.edu.ifgoiano.Empreventos.service.MaterialComplementarService;
+import br.edu.ifgoiano.Empreventos.service.ComplementaryMaterialService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,28 +11,29 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/atividades/{activityId}/materiais")
-public class MaterialComplementarController {
+@RequestMapping("/api/activities/{activityId}/materials")
+public class ComplementaryMaterialController {
 
     @Autowired
-    private MaterialComplementarService materialService;
+    private ComplementaryMaterialService materialService;
 
-
-    @PostMapping("/atividades/{atividadeId}/materiais")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ComplementaryMaterialDTO addMaterial(
-            @PathVariable Integer ActivityId,
+            @PathVariable Integer activityId,
             @Valid @RequestBody ComplementaryMaterialDTO materialDTO) {
-        return materialService.create(ActivityId, materialDTO);
+
+        materialDTO.setActivityId(activityId);
+        return materialService.create(materialDTO);
     }
 
-    @GetMapping("/atividades/{atividadeId}/materiais")
-    public List<ComplementaryMaterialDTO> findMateriaisPorAtividade(@PathVariable Integer ActivityId) {
-        return materialService.findByAtividadeId(ActivityId);
+    @GetMapping
+    public List<ComplementaryMaterialDTO> findMateriaisPorAtividade(
+            @PathVariable Integer activityId) {
+        return materialService.findByAtividadeId(activityId);
     }
 
-
-    @DeleteMapping("/materiais/{materialId}")
+    @DeleteMapping("/{materialId}")
     public ResponseEntity<?> deleteMaterial(@PathVariable Integer materialId) {
         materialService.delete(materialId);
         return ResponseEntity.noContent().build();

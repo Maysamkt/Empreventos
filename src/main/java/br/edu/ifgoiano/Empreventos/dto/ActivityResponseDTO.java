@@ -4,59 +4,50 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class ActivityResponseDTO {
-    private Long id;
-    private String titulo;
-    private String tipoAtividade;
-    private LocalDateTime dataHoraInicio;
-    private LocalDateTime dataHoraFim;
-    private List<MaterialComplementarDTO> materiais;
+    private Integer id;
+    private String title;
+    private LocalDateTime startDateTime;
+    private LocalDateTime endDateTime;
+    private List<ComplementaryMaterialDTO> complementaryMaterials;
 
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getTitulo() {
-        return titulo;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getTipoAtividade() {
-        return tipoAtividade;
+    public LocalDateTime getStartDateTime() {
+        return startDateTime;
     }
 
-    public void setTipoAtividade(String tipoAtividade) {
-        this.tipoAtividade = tipoAtividade;
+    public void setStartDateTime(LocalDateTime startDateTime) {
+        this.startDateTime = startDateTime;
     }
 
-    public LocalDateTime getDataHoraInicio() {
-        return dataHoraInicio;
+    public LocalDateTime getEndDateTime() {
+        return endDateTime;
     }
 
-    public void setDataHoraInicio(LocalDateTime dataHoraInicio) {
-        this.dataHoraInicio = dataHoraInicio;
+    public void setEndDateTime(LocalDateTime endDateTime) {
+        this.endDateTime = endDateTime;
     }
 
-    public LocalDateTime getDataHoraFim() {
-        return dataHoraFim;
+    public List<ComplementaryMaterialDTO> getComplementaryMaterials() {
+        return complementaryMaterials;
     }
 
-    public void setDataHoraFim(LocalDateTime dataHoraFim) {
-        this.dataHoraFim = dataHoraFim;
-    }
-
-    public List<MaterialComplementarDTO> getMateriais() {
-        return materiais;
-    }
-
-    public void setMateriais(List<MaterialComplementarDTO> materiais) {
-        this.materiais = materiais;
+    public void setComplementaryMaterials(List<ComplementaryMaterialDTO> complementaryMaterials) {
+        this.complementaryMaterials = complementaryMaterials;
     }
 }

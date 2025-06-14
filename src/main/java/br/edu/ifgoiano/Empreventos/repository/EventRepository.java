@@ -1,20 +1,21 @@
 package br.edu.ifgoiano.Empreventos.repository;
 
 import br.edu.ifgoiano.Empreventos.model.Event;
-import br.edu.ifgoiano.Empreventos.model.StatusEvento;
+import br.edu.ifgoiano.Empreventos.model.EventStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
-public interface EventRepository extends JpaRepository<Event, Long> {
+public interface EventRepository extends JpaRepository<Event, Integer> {
 
-    List<Event> findByStatus(StatusEvento status);
+    List<Event> findByStatus(EventStatus status);
 
-    List<Event> findByEventoPago(boolean eventoPago);
+    List<Event> findByRegistrationValueGreaterThan(BigDecimal value);
 
-    List<Event> findByTituloContainingIgnoreCase(String titulo);
+    List<Event> findByTitleContainingIgnoreCase(String title);
 
 }

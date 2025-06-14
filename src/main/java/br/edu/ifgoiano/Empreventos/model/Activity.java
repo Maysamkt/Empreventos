@@ -1,115 +1,165 @@
 package br.edu.ifgoiano.Empreventos.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List; // IMPORTAR
+import java.util.List;
 
 @Entity
-@Table(name = "atividades")
-public class Atividade implements Serializable {
+@Table(name = "activity")
+@Where(clause = "deleted_at IS NULL")
+public class Activity implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
-    @Column(nullable = false)
-    private String titulo;
+    @Column(name = "title", nullable = false, length = 100)
+    private String title;
 
     @Column(columnDefinition = "TEXT")
-    private String descricao;
+    private String description;
 
-    @Column(name = "data_hora_inicio", nullable = false)
-    private LocalDateTime dataHoraInicio;
+    @Column(name = "start_date_time", nullable = false)
+    private LocalDateTime startDateTime;
 
-    @Column(name = "data_hora_fim", nullable = false)
-    private LocalDateTime dataHoraFim;
+    @Column(name = "end_date_time", nullable = false)
+    private LocalDateTime endDateTime;
 
-    @Column(name = "tipo_atividade", nullable = false)
-    private String tipoAtividade;
+    @Column(length = 100)
+    private String location;
 
-    @Column(name = "capacidade", nullable = false)
-    private int capacidade;
+    @Column(name = "hours_certified")
+    private Integer hoursCertified = 0;
 
+    @Column(name = "is_published")
+    private boolean isPublished = false;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    // --- RELACIONAMENTOS ---
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "evento_id", nullable = false)
-    private Event evento;
+    @JoinColumn(name = "event_id", nullable = false)
+    private Event event;
 
-    //Uma atividade pode ter muitos materiais.
-    @OneToMany(mappedBy = "atividade", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MaterialComplementar> materiais;
+    @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL)
+    private List<ComplementaryMaterial> complementaryMaterials;
 
-
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getTitulo() {
-        return titulo;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public LocalDateTime getDataHoraInicio() {
-        return dataHoraInicio;
+    public LocalDateTime getStartDateTime() {
+        return startDateTime;
     }
 
-    public void setDataHoraInicio(LocalDateTime dataHoraInicio) {
-        this.dataHoraInicio = dataHoraInicio;
+    public void setStartDateTime(LocalDateTime startDateTime) {
+        this.startDateTime = startDateTime;
     }
 
-    public LocalDateTime getDataHoraFim() {
-        return dataHoraFim;
+    public LocalDateTime getEndDateTime() {
+        return endDateTime;
     }
 
-    public void setDataHoraFim(LocalDateTime dataHoraFim) {
-        this.dataHoraFim = dataHoraFim;
+    public void setEndDateTime(LocalDateTime endDateTime) {
+        this.endDateTime = endDateTime;
     }
 
-    public String getTipoAtividade() {
-        return tipoAtividade;
+    public String getLocation() {
+        return location;
     }
 
-    public void setTipoAtividade(String tipoAtividade) {
-        this.tipoAtividade = tipoAtividade;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
-    public int getCapacidade() {
-        return capacidade;
+    public Integer getHoursCertified() {
+        return hoursCertified;
     }
 
-    public void setCapacidade(int capacidade) {
-        this.capacidade = capacidade;
+    public void setHoursCertified(Integer hoursCertified) {
+        this.hoursCertified = hoursCertified;
     }
 
-    public Event getEvento() {
-        return evento;
+    public boolean isPublished() {
+        return isPublished;
     }
 
-    public void setEvento(Event evento) {
-        this.evento = evento;
+    public void setPublished(boolean published) {
+        this.isPublished = published;
     }
 
-    public List<MaterialComplementar> getMateriais() {
-        return materiais;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setMateriais(List<MaterialComplementar> materiais) {
-        this.materiais = materiais;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public LocalDateTime getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
+    }
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
+    public List<ComplementaryMaterial> getComplementaryMaterials() {
+        return complementaryMaterials;
+    }
+
+    public void setComplementaryMaterials(List<ComplementaryMaterial> complementaryMaterials) {
+        this.complementaryMaterials = complementaryMaterials;
     }
 }

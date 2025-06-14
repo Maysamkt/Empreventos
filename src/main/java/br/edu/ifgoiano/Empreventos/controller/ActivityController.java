@@ -1,14 +1,17 @@
 package br.edu.ifgoiano.Empreventos.controller;
 
+import br.edu.ifgoiano.Empreventos.dto.ActivityDTO;
 import br.edu.ifgoiano.Empreventos.dto.ActivityResponseDTO;
 import br.edu.ifgoiano.Empreventos.service.ActivityService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/api/atividades")
-public class AtividadeController {
+@RequestMapping("/api/activities")
+public class ActivityController {
 
     @Autowired
     private ActivityService activityService;
@@ -19,21 +22,18 @@ public class AtividadeController {
         return activityService.findById(id);
     }
 
-    /* // Outros endpoints para gerenciar a atividade
     @PutMapping("/{id}")
     public ActivityDTO update(
-        // CORRIGIDO: Long para Integer
-        @PathVariable Integer id,
-        @Valid @RequestBody ActivityDTO atividadeDTO) {
+            // CORRIGIDO: Long para Integer
+            @PathVariable Integer id,
+            @Valid @RequestBody ActivityDTO atividadeDTO) {
         return activityService.update(id, atividadeDTO);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(
-        // CORRIGIDO: Long para Integer
-        @PathVariable Integer id) {
+    public ResponseEntity<?> delete(@PathVariable Integer id) {
         activityService.delete(id);
         return ResponseEntity.noContent().build();
     }
-    */
+
 }

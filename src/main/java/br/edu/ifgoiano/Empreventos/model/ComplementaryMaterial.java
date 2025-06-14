@@ -9,8 +9,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "complementary_material") // ALTERADO
-@Where(clause = "deleted_at IS NULL") // NOVO
+@Table(name = "complementary_material")
+@Where(clause = "deleted_at IS NULL")
 public class ComplementaryMaterial implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -19,19 +19,18 @@ public class ComplementaryMaterial implements Serializable {
     private Integer id;
 
     @Column(nullable = false, length = 100)
-    private String title; // ALTERADO
+    private String title;
 
     @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(nullable = false)
-    private String url; // ALTERADO
+    private String url;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private MaterialType type; // NOVO
+    private MaterialType type;
 
-    // --- NOVOS CAMPOS DE AUDITORIA ---
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -48,7 +47,6 @@ public class ComplementaryMaterial implements Serializable {
     @JoinColumn(name = "activity_id", nullable = false)
     private Activity activity;
 
-    // Getters e Setters para TODOS os campos...
     public Integer getId() {
         return id;
     }

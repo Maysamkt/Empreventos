@@ -1,17 +1,19 @@
 package br.edu.ifgoiano.Empreventos.dto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class EventResponseDTO {
     private Long id;
-    private String titulo;
-    private String descricao;
-    private LocalDate dataInicio;
-    private LocalDate dataFim;
-    private String local;
+    private String title;
+    private String description;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+    private String location;
     private String status;
-    private List<AtividadeResponseDTO> atividades;
+    private List<ActivityResponseDTO> activities;
+    private List<RatingDTO> ratings;
 
 
     public Long getId() {
@@ -22,44 +24,44 @@ public class EventResponseDTO {
         this.id = id;
     }
 
-    public String getTitulo() {
-        return titulo;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public LocalDate getDataInicio() {
-        return dataInicio;
+    public LocalDateTime getStartDate() {
+        return startDate;
     }
 
-    public void setDataInicio(LocalDate dataInicio) {
-        this.dataInicio = dataInicio;
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
     }
 
-    public LocalDate getDataFim() {
-        return dataFim;
+    public LocalDateTime getEndDate() {
+        return endDate;
     }
 
-    public void setDataFim(LocalDate dataFim) {
-        this.dataFim = dataFim;
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
     }
 
-    public String getLocal() {
-        return local;
+    public String getLocation() {
+        return location;
     }
 
-    public void setLocal(String local) {
-        this.local = local;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public String getStatus() {
@@ -70,11 +72,19 @@ public class EventResponseDTO {
         this.status = status;
     }
 
-    public List<AtividadeResponseDTO> getAtividades() {
-        return atividades;
+    public List<ActivityResponseDTO> getActivities() {
+        return activities;
     }
 
-    public void setAtividades(List<AtividadeResponseDTO> atividades) {
-        this.atividades = atividades;
+    public void setActivities(List<ActivityResponseDTO> activities) {
+        this.activities = activities;
+    }
+
+    public List<RatingDTO> getAvaliacoes() {
+        return ratings;
+    }
+
+    public void setAvaliacoes(List<RatingDTO> avaliacoes) {
+        this.ratings = avaliacoes;
     }
 }
