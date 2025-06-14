@@ -2,12 +2,15 @@ package br.edu.ifgoiano.Empreventos.model;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "role")
-public class Role {
+public class Role implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,8 +24,8 @@ public class Role {
     @Column(length = 255)
     private String description;
 
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
+    @OneToMany(mappedBy = "role")
+    private Set<UserRole> userRoles = new HashSet<>();
 
     // Enum para os valores fixos
     public enum RoleName {
@@ -59,12 +62,12 @@ public class Role {
         this.description = description;
     }
 
-    public Set<User> getUsers() {
-        return users;
+    public Set<UserRole> getUserRoles() {
+        return userRoles;
     }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
+    public void setUserRoles(Set<UserRole> userRoles) {
+        this.userRoles = userRoles;
     }
 
     @Override
@@ -72,12 +75,12 @@ public class Role {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Role role = (Role) o;
-        return Objects.equals(id, role.id) && name == role.name && Objects.equals(description, role.description) && Objects.equals(users, role.users);
+        return Objects.equals(id, role.id) && name == role.name && Objects.equals(description, role.description) && Objects.equals(userRoles, role.userRoles);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, users);
+        return Objects.hash(id, name, description, userRoles);
     }
 
     @Override
@@ -86,7 +89,7 @@ public class Role {
                 "id=" + id +
                 ", name=" + name +
                 ", description='" + description + '\'' +
-                ", users=" + users +
+                ", userRoles=" + userRoles +
                 '}';
     }
 }
