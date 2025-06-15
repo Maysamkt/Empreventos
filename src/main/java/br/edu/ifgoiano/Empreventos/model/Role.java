@@ -1,5 +1,7 @@
 package br.edu.ifgoiano.Empreventos.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -25,6 +27,7 @@ public class Role implements Serializable {
     private String description;
 
     @OneToMany(mappedBy = "role")
+    @JsonIgnoreProperties({"role", "user"})
     private Set<UserRole> userRoles = new HashSet<>();
 
     // Enum para os valores fixos
@@ -75,12 +78,12 @@ public class Role implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Role role = (Role) o;
-        return Objects.equals(id, role.id) && name == role.name && Objects.equals(description, role.description) && Objects.equals(userRoles, role.userRoles);
+        return Objects.equals(id, role.id) && name == role.name && Objects.equals(description, role.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, userRoles);
+        return Objects.hash(id, name, description);
     }
 
     @Override
@@ -89,7 +92,6 @@ public class Role implements Serializable {
                 "id=" + id +
                 ", name=" + name +
                 ", description='" + description + '\'' +
-                ", userRoles=" + userRoles +
                 '}';
     }
 }

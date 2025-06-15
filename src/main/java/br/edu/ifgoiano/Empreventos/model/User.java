@@ -1,8 +1,10 @@
 package br.edu.ifgoiano.Empreventos.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Objects;
@@ -10,20 +12,24 @@ import java.util.Set;
 
 @Entity
 @Table(name = "user")
-public class User {
+public class User implements Serializable {
+
+
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(nullable = false, length = 100)
     private String name;
     @Column(nullable = false, length = 255)
     private String password;
-    @Column(length = 20, unique = true)
+    @Column(name = "cpf_cnpj", length = 20, unique = true)
     private String cpf_cnpj;
     @Column(nullable = false, length = 100, unique = true)
     private String email;
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 100)
     private String phone_number;
     @Column(nullable = false)
     private Boolean active;
@@ -45,16 +51,58 @@ public class User {
     private Date deleted_at;
 
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_role",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("user")
+    private Set<UserRole> userRoles = new HashSet<>();
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("user")
+    private SpeakerDetails speakerDetails;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("user")
+    private ListenerDetails listenerDetails;
+
+    //@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+   // @JsonIgnoreProperties("user")
+    //private OrganizerDetails organizerDetails;
+
+    // Métodos utilitários
+    public void addRole(Role role) {
+        UserRole userRole = new UserRole(this, role);
+        userRoles.add(userRole);
+    }
+
+
+    public void removeRole(Role role) {
+        UserRole userRole = new UserRole(this, role);
+        userRoles.remove(userRole);
+    }
+
+    public void setSpeakerDetails(SpeakerDetails details) {
+        this.speakerDetails = details;
+        if (details != null) {
+            details.setUser(this);
+        }
+    }
+
+    public void setListenerDetails(ListenerDetails details) {
+        this.listenerDetails = details;
+        if (details != null) {
+            details.setUser(this);
+        }
+    }
+
+//    public void setOrganizerDetails(OrganizerDetails details) {
+//        this.organizerDetails = details;
+//        if (details != null) {
+//            details.setUser(this);
+//        }
+//    }
 
     public User() {}
 
-    public User(Integer id, String name, String password, String cpf_cnpj, String email, String phone_number, Boolean active, String avatar_url, String bio, Date created_at, Date updated_at, Date deleted_at, Set<Role> roles) {
+    public User(Long id, String name, String password, String cpf_cnpj, String email, String phone_number, Boolean active, String avatar_url, String bio, Date created_at, Date updated_at, Date deleted_at, Set<UserRole> userRoles) {
         this.id = id;
         this.name = name;
         this.password = password;
@@ -67,15 +115,14 @@ public class User {
         this.created_at = created_at;
         this.updated_at = updated_at;
         this.deleted_at = deleted_at;
-        this.roles = roles;
+        this.userRoles = userRoles;
     }
 
-
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -167,12 +214,20 @@ public class User {
         this.deleted_at = deleted_at;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public Set<UserRole> getUserRoles() {
+        return userRoles;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setUserRoles(Set<UserRole> userRoles) {
+        this.userRoles = userRoles;
+    }
+
+    public SpeakerDetails getSpeakerDetails() {
+        return speakerDetails;
+    }
+
+    public ListenerDetails getListenerDetails() {
+        return listenerDetails;
     }
 
     @Override
@@ -180,12 +235,12 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(password, user.password) && Objects.equals(cpf_cnpj, user.cpf_cnpj) && Objects.equals(email, user.email) && Objects.equals(phone_number, user.phone_number) && Objects.equals(active, user.active) && Objects.equals(avatar_url, user.avatar_url) && Objects.equals(bio, user.bio) && Objects.equals(created_at, user.created_at) && Objects.equals(updated_at, user.updated_at) && Objects.equals(deleted_at, user.deleted_at) && Objects.equals(roles, user.roles);
+        return Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(password, user.password) && Objects.equals(cpf_cnpj, user.cpf_cnpj) && Objects.equals(email, user.email) && Objects.equals(phone_number, user.phone_number) && Objects.equals(active, user.active) && Objects.equals(avatar_url, user.avatar_url) && Objects.equals(bio, user.bio) && Objects.equals(created_at, user.created_at) && Objects.equals(updated_at, user.updated_at) && Objects.equals(deleted_at, user.deleted_at);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, password, cpf_cnpj, email, phone_number, active, avatar_url, bio, created_at, updated_at, deleted_at, roles);
+        return Objects.hash(id, name, password, cpf_cnpj, email, phone_number, active, avatar_url, bio, created_at, updated_at, deleted_at);
     }
 
     @Override
@@ -203,7 +258,8 @@ public class User {
                 ", created_at=" + created_at +
                 ", updated_at=" + updated_at +
                 ", deleted_at=" + deleted_at +
-                ", roles=" + roles +
                 '}';
     }
+
+
 }

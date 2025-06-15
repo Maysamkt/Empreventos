@@ -22,7 +22,7 @@ public class RatingService {
    @Autowired
     private SubscriptionRepository subscriptionRepository;
 
-    public RatingDTO create(Integer subscriptionId, RatingDTO ratingDTO) {
+    public RatingDTO create(Long subscriptionId, RatingDTO ratingDTO) {
         var subscription = subscriptionRepository.findById(subscriptionId)
                 .orElseThrow(() -> new NoSuchElementException("Inscrição não encontrada com ID: " + subscriptionId));
         var rating = DataMapper.parseObject(ratingDTO, Rating.class);

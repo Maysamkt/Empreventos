@@ -18,7 +18,7 @@ public class RatingController {
     private RatingService ratingService;
 
     @PostMapping("/subscriptions/{subscriptionId}/ratings")
-    public ResponseEntity<RatingDTO> create(@PathVariable Integer subscriptionId, @Valid @RequestBody RatingDTO ratingDTO) {
+    public ResponseEntity<RatingDTO> create(@PathVariable Long subscriptionId, @Valid @RequestBody RatingDTO ratingDTO) {
         var createdRating = ratingService.create(subscriptionId, ratingDTO);
         return new ResponseEntity<>(createdRating, HttpStatus.CREATED);
     }

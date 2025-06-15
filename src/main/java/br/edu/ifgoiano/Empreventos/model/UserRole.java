@@ -1,5 +1,8 @@
 package br.edu.ifgoiano.Empreventos.model;
 
+
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -13,11 +16,13 @@ public class UserRole {
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnoreProperties({"userRoles", "speakerDetails", "listenerDetails"})
     private User user;
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", nullable = false)
+    @JsonIgnoreProperties("userRoles")
     private Role role;
 
     @Column(name = "created_at", updatable = false)
@@ -33,6 +38,14 @@ public class UserRole {
     public static class UserRoleId implements Serializable {
         private Long user;
         private Byte role;
+
+        public UserRoleId() {
+        }
+
+        public UserRoleId(Long user, Byte role) {
+            this.user = user;
+            this.role = role;
+        }
 
         public Long getUser() {
             return user;
@@ -55,7 +68,8 @@ public class UserRole {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             UserRoleId that = (UserRoleId) o;
-            return Objects.equals(user, that.user) && Objects.equals(role, that.role);
+            return Objects.equals(user, that.user) &&
+                    Objects.equals(role, that.role);
         }
 
         @Override
@@ -123,18 +137,6 @@ public class UserRole {
         this.deleted_at = deleted_at;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserRole userRole = (UserRole) o;
-        return Objects.equals(user, userRole.user) && Objects.equals(role, userRole.role) && Objects.equals(created_at, userRole.created_at) && Objects.equals(updated_at, userRole.updated_at) && Objects.equals(deleted_at, userRole.deleted_at);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(user, role, created_at, updated_at, deleted_at);
-    }
 
     @Override
     public String toString() {

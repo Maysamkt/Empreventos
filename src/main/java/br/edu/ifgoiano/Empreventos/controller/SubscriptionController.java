@@ -23,13 +23,13 @@ public class SubscriptionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SubscriptionResponseDTO> findById(@PathVariable Integer id) {
+    public ResponseEntity<SubscriptionResponseDTO> findById(@PathVariable Long id) {
         var subscription = subscriptionService.findById(id);
         return ResponseEntity.ok(subscription);
     }
 
     @PutMapping("/{id}/cancel")
-    public ResponseEntity<SubscriptionResponseDTO> cancel(@PathVariable Integer id) {
+    public ResponseEntity<SubscriptionResponseDTO> cancel(@PathVariable Long id) {
         var cancelledSubscription = subscriptionService.cancel(id);
         return ResponseEntity.ok(cancelledSubscription);
     }

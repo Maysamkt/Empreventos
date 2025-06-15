@@ -10,7 +10,7 @@ public class SubscriptionResponseDTO {
     private LocalDateTime createdAt;
     private Integer eventId;
     private String eventTitle;
-    private Integer listenerId;
+    private Long listenerId;
     private String listenerName;
 
 
@@ -62,11 +62,11 @@ public class SubscriptionResponseDTO {
         this.eventTitle = eventTitle;
     }
 
-    public Integer getListenerId() {
+    public Long getListenerId() {
         return listenerId;
     }
 
-    public void setListenerId(Integer listenerId) {
+    public void setListenerId(Long listenerId) {
         this.listenerId = listenerId;
     }
 

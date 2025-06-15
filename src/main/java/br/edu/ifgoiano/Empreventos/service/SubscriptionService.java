@@ -49,14 +49,14 @@ public class SubscriptionService {
         return toResponseDTO(savedSubscription);
     }
 
-    public SubscriptionResponseDTO findById(Integer id) {
+    public SubscriptionResponseDTO findById(Long id) {
         var subscription = subscriptionRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Inscrição não encontrada com o ID: " + id));
         return toResponseDTO(subscription);
     }
 
 
-    public SubscriptionResponseDTO cancel(Integer id) {
+    public SubscriptionResponseDTO cancel(Long id) {
         var subscription = subscriptionRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Inscrição não encontrada com o ID: " + id));
         subscription.setStatus(SubscriptionStatus.CANCELED);

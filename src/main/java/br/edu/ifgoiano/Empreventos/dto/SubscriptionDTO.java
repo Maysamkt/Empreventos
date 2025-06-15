@@ -11,7 +11,7 @@ public class SubscriptionDTO {
     private Integer eventId;
 
     @NotNull(message = "O ID do participante é obrigatório.")
-    private Integer listenerId;
+    private Long listenerId;
 
     @NotNull(message = "O valor pago é obrigatório.")
     @PositiveOrZero(message = "O valor pago deve ser zero ou maior.")
@@ -26,11 +26,11 @@ public class SubscriptionDTO {
         this.eventId = eventId;
     }
 
-    public Integer getListenerId() {
+    public Long getListenerId() {
         return listenerId;
     }
 
-    public void setListenerId(Integer listenerId) {
+    public void setListenerId(Long listenerId) {
         this.listenerId = listenerId;
     }
 

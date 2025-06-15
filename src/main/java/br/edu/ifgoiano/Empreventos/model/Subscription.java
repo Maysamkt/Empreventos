@@ -17,7 +17,7 @@ public class Subscription implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -46,11 +46,11 @@ public class Subscription implements Serializable {
     @JoinColumn(name = "listener_id", referencedColumnName = "id", nullable = false)
     private User listener;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
