@@ -5,7 +5,7 @@ import br.edu.ifgoiano.Empreventos.dto.response.UserResponseDTO;
 import br.edu.ifgoiano.Empreventos.model.Role;
 import br.edu.ifgoiano.Empreventos.model.User;
 
-import br.edu.ifgoiano.Empreventos.model.UserMapper;
+import br.edu.ifgoiano.Empreventos.mapper.UserMapper;
 import br.edu.ifgoiano.Empreventos.model.UserRole;
 import br.edu.ifgoiano.Empreventos.repository.RoleRepository;
 import br.edu.ifgoiano.Empreventos.repository.UserRepository;

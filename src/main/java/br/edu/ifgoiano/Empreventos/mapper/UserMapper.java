@@ -1,7 +1,8 @@
-package br.edu.ifgoiano.Empreventos.model;
+package br.edu.ifgoiano.Empreventos.mapper;
 
 import br.edu.ifgoiano.Empreventos.dto.request.UserRequestDTO;
 import br.edu.ifgoiano.Empreventos.dto.response.UserResponseDTO;
+import br.edu.ifgoiano.Empreventos.model.User;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
