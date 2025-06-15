@@ -1,6 +1,6 @@
 package br.edu.ifgoiano.Empreventos.mapper;
 
-import br.edu.ifgoiano.Empreventos.dto.request.ListenerRequestDTO;
+import br.edu.ifgoiano.Empreventos.dto.request.ListenerDetailsRequestDTO;
 import br.edu.ifgoiano.Empreventos.dto.response.ListenerDetailsResponseDTO;
 import br.edu.ifgoiano.Empreventos.model.ListenerDetails;
 import org.springframework.stereotype.Component;
@@ -18,11 +18,16 @@ public class ListenerDetailsMapper {
         dto.setCompany(listenerDetails.getCompany());
         dto.setPosition(listenerDetails.getPosition());
 
+        if (listenerDetails.getUser() != null) {
+            dto.setId(listenerDetails.getUser().getId());
+            dto.setUserName(listenerDetails.getUser().getName());
+        }
+
         return dto;
 
     }
 
-    public ListenerDetails toEntity(ListenerRequestDTO dto) {
+    public ListenerDetails toEntity(ListenerDetailsRequestDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -32,7 +37,7 @@ public class ListenerDetailsMapper {
         return listenerDetails;
     }
 
-    public void updateEntityFromDTO(ListenerRequestDTO dto, ListenerDetails entity) {
+    public void updateEntityFromDTO(ListenerDetailsRequestDTO dto, ListenerDetails entity) {
         if (dto == null || entity == null) {
             return;
         }

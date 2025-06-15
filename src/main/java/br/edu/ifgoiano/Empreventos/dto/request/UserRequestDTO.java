@@ -4,6 +4,7 @@ package br.edu.ifgoiano.Empreventos.dto.request;
 
 
 import br.edu.ifgoiano.Empreventos.model.Role;
+import jakarta.validation.constraints.*;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -11,25 +12,25 @@ import java.util.Set;
 public class UserRequestDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
-   // @NotBlank(message = "O nome é obrigatório")
+    @NotBlank(message = "O nome é obrigatório")
     private String name;
 
 
-  //  @NotBlank(message = "A Senha é obrigatória")
-  //  @Size(min = 6, max = 10, message = "A senha deve ter entre 6 e 10 caracteres")
+    @NotBlank(message = "A Senha é obrigatória")
+    @Size(min = 6, max = 10, message = "A senha deve ter entre 6 e 10 caracteres")
     private String password;
 
-  //  @NotBlank(message = "CPF/CNPJ é obrigatório")
-  //  @Pattern(regexp = "\\d{11}|\\d{14}", message = "CPF deve ter 11 dígitos ou CNPJ 14 dígitos")
+    @NotBlank(message = "CPF/CNPJ é obrigatório")
+    @Pattern(regexp = "\\d{11}|\\d{14}", message = "CPF deve ter 11 dígitos ou CNPJ 14 dígitos")
     private String cpf_cnpj;
 
-  //  @NotBlank(message = "O email é obrigatório")
- //   @Email(message = "Formato de e-mail inválido")
+    @NotBlank(message = "O email é obrigatório")
+    @Email(message = "Formato de e-mail inválido")
     private String email;
 
- //   @NotBlank(message = "Telefone é obrigatório")
-  //  @Pattern(regexp = "^\\(?\\d{2}\\)?[\\s-]?\\d{4,5}[\\s-]?\\d{4}$",
-    //        message = "Formato de telefone inválido")
+    @NotBlank(message = "Telefone é obrigatório")
+    @Pattern(regexp = "^\\(?\\d{2}\\)?[\\s-]?\\d{4,5}[\\s-]?\\d{4}$",
+            message = "Formato de telefone inválido")
     private String phone_number;
 
     private Boolean active = true;
@@ -38,12 +39,12 @@ public class UserRequestDTO implements Serializable {
 
     private String bio;
 
-   // @NotEmpty(message = "Pelo menos uma role deve ser especificada")
+    @NotEmpty(message = "Pelo menos uma role deve ser especificada")
     private Set<Role.RoleName> roles;
 
 
-    private SpeakerRequestDTO speakerDetails;
-    private ListenerRequestDTO listenerDetails;
+    private SpeakerDetailsRequestDTO speakerDetails;
+    private ListenerDetailsRequestDTO listenerDetails;
    // private OrganizerRequestDTO organizerDetails;
 
     public UserRequestDTO() {}
@@ -120,19 +121,19 @@ public class UserRequestDTO implements Serializable {
         this.roles = roles;
     }
 
-    public SpeakerRequestDTO getSpeakerDetails() {
+    public SpeakerDetailsRequestDTO getSpeakerDetails() {
         return speakerDetails;
     }
 
-    public void setSpeakerDetails(SpeakerRequestDTO speakerDetails) {
+    public void setSpeakerDetails(SpeakerDetailsRequestDTO speakerDetails) {
         this.speakerDetails = speakerDetails;
     }
 
-    public ListenerRequestDTO getListenerDetails() {
+    public ListenerDetailsRequestDTO getListenerDetails() {
         return listenerDetails;
     }
 
-    public void setListenerDetails(ListenerRequestDTO listenerDetails) {
+    public void setListenerDetails(ListenerDetailsRequestDTO listenerDetails) {
         this.listenerDetails = listenerDetails;
     }
 

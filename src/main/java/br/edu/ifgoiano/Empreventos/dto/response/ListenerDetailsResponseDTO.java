@@ -2,8 +2,18 @@ package br.edu.ifgoiano.Empreventos.dto.response;
 
 public class ListenerDetailsResponseDTO {
     private Long id;
+    private String userName;
     private String company;
     private String position;
+
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public Long getId() {
         return id;

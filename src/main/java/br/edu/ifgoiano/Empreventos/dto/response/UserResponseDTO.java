@@ -24,18 +24,8 @@ public class UserResponseDTO  implements Serializable {
 
 
 
-    public UserResponseDTO() {}
 
-    public UserResponseDTO(Long id, String name, String email, String phoneNumber, Boolean active, String avatarUrl, String bio, List<String> roles) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.active = active;
-        this.avatarUrl = avatarUrl;
-        this.bio = bio;
-        this.roles = roles;
-    }
+
 
     public Long getId() {
         return id;

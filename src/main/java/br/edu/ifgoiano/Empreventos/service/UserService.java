@@ -14,10 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -131,8 +128,34 @@ public class UserService {
         });
     }
 
-    private void updateUserRoles(User user, Set<Role.RoleName> roleNames) {
-        user.getUserRoles().clear();
-        addRolesToUser(user, roleNames);
+    private void updateUserRoles(User user, Set<Role.RoleName> newRoleNames) {
+
+        if (user.getUserRoles() == null) {
+            user.setUserRoles(new HashSet<>());
+        } else {
+
+            user.getUserRoles().size();
+        }
+        Set<UserRole> desiredUserRoles = newRoleNames.stream()
+                .map(roleName -> {
+                    Role role = roleRepository.findByName(roleName)
+                            .orElseThrow(() -> new IllegalArgumentException("Role não encontrada: " + roleName));
+
+
+                    UserRole newUserRole = new UserRole();
+                    newUserRole.setUser(user);
+                    newUserRole.setRole(role);
+                    return newUserRole;
+                })
+                .collect(Collectors.toSet());
+        user.getUserRoles().removeIf(existingUserRole -> !desiredUserRoles.contains(existingUserRole));
+
+        desiredUserRoles.forEach(desired -> {
+            if (!user.getUserRoles().contains(desired)) {
+                user.getUserRoles().add(desired);
+                desired.setUser(user);
+            }
+        });
     }
+
 }

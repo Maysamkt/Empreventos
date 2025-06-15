@@ -1,7 +1,7 @@
 package br.edu.ifgoiano.Empreventos.mapper;
 
 
-import br.edu.ifgoiano.Empreventos.dto.request.SpeakerRequestDTO;
+import br.edu.ifgoiano.Empreventos.dto.request.SpeakerDetailsRequestDTO;
 import br.edu.ifgoiano.Empreventos.dto.response.SpeakerDetailsResponseDTO;
 import br.edu.ifgoiano.Empreventos.model.SpeakerDetails;
 import org.springframework.stereotype.Component;
@@ -20,11 +20,16 @@ public class SpeakerDetailsMapper {
         dto.setLinkedin(speakerDetails.getLinkedin());
         dto.setOther_social_networks(speakerDetails.getOther_social_networks());
 
+        if (speakerDetails.getUser() != null) {
+            dto.setId(speakerDetails.getUser().getId());
+            dto.setUserName(speakerDetails.getUser().getName());
+        }
+
         return dto;
 
     }
 
-    public SpeakerDetails toEntity(SpeakerRequestDTO dto) {
+    public SpeakerDetails toEntity(SpeakerDetailsRequestDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -36,7 +41,7 @@ public class SpeakerDetailsMapper {
         return speakerDetails;
     }
 
-    public void updateEntityFromDTO(SpeakerRequestDTO dto, SpeakerDetails entity) {
+    public void updateEntityFromDTO(SpeakerDetailsRequestDTO dto, SpeakerDetails entity) {
         if (dto == null || entity == null) {
             return;
         }
