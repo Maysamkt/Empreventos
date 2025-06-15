@@ -2,6 +2,9 @@ package br.edu.ifgoiano.Empreventos.dto.response;
 
 
 
+import br.edu.ifgoiano.Empreventos.model.ListenerDetails;
+import br.edu.ifgoiano.Empreventos.model.SpeakerDetails;
+
 import java.io.Serializable;
 
 import java.util.List;
@@ -18,6 +21,8 @@ public class UserResponseDTO  implements Serializable {
     private String avatarUrl;
     private String bio;
     private List<String> roles;
+
+
 
     public UserResponseDTO() {}
 

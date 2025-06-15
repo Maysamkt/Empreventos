@@ -1,9 +1,7 @@
 package br.edu.ifgoiano.Empreventos.model;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -224,6 +222,14 @@ public class User implements Serializable {
         this.userRoles = userRoles;
     }
 
+    public SpeakerDetails getSpeakerDetails() {
+        return speakerDetails;
+    }
+
+    public ListenerDetails getListenerDetails() {
+        return listenerDetails;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -254,4 +260,6 @@ public class User implements Serializable {
                 ", deleted_at=" + deleted_at +
                 '}';
     }
+
+
 }

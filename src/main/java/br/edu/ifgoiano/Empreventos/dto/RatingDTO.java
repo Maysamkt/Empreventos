@@ -10,7 +10,7 @@ public class RatingDTO {
     private Integer id;
 
     @NotNull(message = "O ID da inscrição é obrigatório.")
-    private Integer subscriptionId;
+    private Long subscriptionId;
 
     @NotNull(message = "A nota é obrigatória.")
     @Min(value = 1, message = "A nota mínima é 1.")
@@ -46,11 +46,11 @@ public class RatingDTO {
         this.comment = comment;
     }
 
-    public Integer getSubscriptionId() {
+    public Long getSubscriptionId() {
         return subscriptionId;
     }
 
-    public void setSubscriptionId(Integer subscriptionId) {
+    public void setSubscriptionId(Long subscriptionId) {
         this.subscriptionId = subscriptionId;
     }
 }

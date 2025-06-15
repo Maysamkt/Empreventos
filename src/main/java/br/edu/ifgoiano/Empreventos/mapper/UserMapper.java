@@ -2,7 +2,11 @@ package br.edu.ifgoiano.Empreventos.mapper;
 
 import br.edu.ifgoiano.Empreventos.dto.request.UserRequestDTO;
 import br.edu.ifgoiano.Empreventos.dto.response.UserResponseDTO;
+import br.edu.ifgoiano.Empreventos.model.ListenerDetails;
+import br.edu.ifgoiano.Empreventos.model.SpeakerDetails;
 import br.edu.ifgoiano.Empreventos.model.User;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -12,6 +16,16 @@ import java.util.stream.Collectors;
 
 @Component
 public class UserMapper {
+
+    private final SpeakerDetailsMapper speakerDetailsMapper;
+    private final ListenerDetailsMapper listenerDetailsMapper;
+
+
+    @Autowired
+    public UserMapper(SpeakerDetailsMapper speakerDetailsMapper, ListenerDetailsMapper listenerDetailsMapper) {
+        this.speakerDetailsMapper = speakerDetailsMapper;
+        this.listenerDetailsMapper = listenerDetailsMapper;
+    }
 
     public UserResponseDTO toResponseDTO(User user) {
         if (user == null) {
@@ -35,6 +49,8 @@ public class UserMapper {
                     .collect(Collectors.toList()));
         }
 
+
+
         return dto;
     }
 
@@ -54,8 +70,14 @@ public class UserMapper {
         user.setCreated_at(new Date());
         user.setUpdated_at(new Date());
 
-        // Nota: As roles são adicionadas separadamente no service
-        // pois precisam ser buscadas no banco de dados
+        if (dto.getSpeakerDetails() != null) {
+            SpeakerDetails speakerDetails = speakerDetailsMapper.toEntity(dto.getSpeakerDetails());
+            user.setSpeakerDetails(speakerDetails); // IMPORTANT: This also sets user on speakerDetails
+        }
+        if (dto.getListenerDetails() != null) {
+            ListenerDetails listenerDetails = listenerDetailsMapper.toEntity(dto.getListenerDetails());
+            user.setListenerDetails(listenerDetails); // IMPORTANT: This also sets user on listenerDetails
+        }
 
         return user;
     }
@@ -71,7 +93,34 @@ public class UserMapper {
         entity.setBio(dto.getBio());
         entity.setUpdated_at(new Date());
 
-        // Campos que não devem ser atualizados:
-        // email, cpf_cnpj, password (devem ter endpoints específicos para atualização)
+        // Handle SpeakerDetails
+        if (dto.getSpeakerDetails() != null) {
+            if (entity.getSpeakerDetails() == null) {
+                // If entity doesn't have speaker details, create new ones
+                SpeakerDetails newSpeakerDetails = speakerDetailsMapper.toEntity(dto.getSpeakerDetails());
+                entity.setSpeakerDetails(newSpeakerDetails);
+            } else {
+                // Otherwise, update existing ones
+                speakerDetailsMapper.updateEntityFromDTO(dto.getSpeakerDetails(), entity.getSpeakerDetails());
+            }
+        } else {
+            // If DTO has no speaker details but entity does, remove them
+            if (entity.getSpeakerDetails() != null) {
+                entity.setSpeakerDetails(null); // Due to orphanRemoval=true, this will delete from DB
+            }
+        }
+        // Handle ListenerDetails
+        if (dto.getListenerDetails() != null) {
+            if (entity.getListenerDetails() == null) {
+                ListenerDetails newListenerDetails = listenerDetailsMapper.toEntity(dto.getListenerDetails());
+                entity.setListenerDetails(newListenerDetails);
+            } else {
+                listenerDetailsMapper.updateEntityFromDTO(dto.getListenerDetails(), entity.getListenerDetails());
+            }
+        } else {
+            if (entity.getListenerDetails() != null) {
+                entity.setListenerDetails(null);
+            }
+        }
     }
 }
