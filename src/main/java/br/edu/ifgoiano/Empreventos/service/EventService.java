@@ -29,30 +29,29 @@ public class EventService {
 
     public EventResponseDTO findById(Long id) {
         logger.info("Encontrando um Evento pelo ID!");
-
         var eventEntity = eventRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Evento com ID " + id + " não encontrado."));
         EventResponseDTO eventDTO = DataMapper.parseObject(eventEntity, EventResponseDTO.class);
 
         // Adiciona um link para a coleção de todos os eventos
+        eventDTO.add(linkTo(methodOn(EventController.class).findById(id)).withSelfRel());
         eventDTO.add(linkTo(methodOn(EventController.class).findAll()).withRel("all-events"));
-        // Adiciona um link para as atividades deste evento
         eventDTO.add(linkTo(methodOn(EventController.class).findActivitiesByEvent(id)).withRel("activities"));
 
-        return DataMapper.parseObject(eventEntity, EventResponseDTO.class);
+        return eventDTO;
     }
 
     public List<EventResponseDTO> findAll() {
         logger.info("Encontrando todos os eventos!");
         List<Event> events = eventRepository.findAll();
-
         List<EventResponseDTO> eventDTOs = DataMapper.parseListObjects(events, EventResponseDTO.class);
+
         // Adicionando links para cada evento na lista
         for (EventResponseDTO event : eventDTOs) {
             event.add(linkTo(methodOn(EventController.class).findById(event.getId())).withSelfRel());
+            event.add(linkTo(methodOn(EventController.class).findActivitiesByEvent(event.getId())).withRel("activities"));
         }
-
-        return DataMapper.parseListObjects(events, EventResponseDTO.class);
+        return eventDTOs;
     }
 
 

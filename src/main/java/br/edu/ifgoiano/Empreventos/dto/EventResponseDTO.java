@@ -14,8 +14,6 @@ public class EventResponseDTO extends RepresentationModel<EventResponseDTO> {
     private LocalDateTime endDate;
     private String location;
     private String status;
-   // private List<ActivityResponseDTO> activities;
-    //private List<RatingDTO> ratings;
 
 
     public Long getId() {
@@ -74,20 +72,4 @@ public class EventResponseDTO extends RepresentationModel<EventResponseDTO> {
         this.status = status;
     }
 
-   /* public List<ActivityResponseDTO> getActivities() {
-        return activities;
-    }
-
-    public void setActivities(List<ActivityResponseDTO> activities) {
-        this.activities = activities;
-    }
-
-    public List<RatingDTO> getAvaliacoes() {
-        return ratings;
-    }
-
-    public void setAvaliacoes(List<RatingDTO> avaliacoes) {
-        this.ratings = avaliacoes;
-    }
-    */
 }

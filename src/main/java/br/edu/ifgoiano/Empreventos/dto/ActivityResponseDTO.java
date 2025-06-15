@@ -1,14 +1,15 @@
 package br.edu.ifgoiano.Empreventos.dto;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class ActivityResponseDTO {
+public class ActivityResponseDTO extends RepresentationModel<ActivityResponseDTO> {
     private Long id;
     private String title;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
-    private List<ComplementaryMaterialDTO> complementaryMaterials;
 
 
     public Long getId() {
@@ -43,11 +44,4 @@ public class ActivityResponseDTO {
         this.endDateTime = endDateTime;
     }
 
-    public List<ComplementaryMaterialDTO> getComplementaryMaterials() {
-        return complementaryMaterials;
-    }
-
-    public void setComplementaryMaterials(List<ComplementaryMaterialDTO> complementaryMaterials) {
-        this.complementaryMaterials = complementaryMaterials;
-    }
 }

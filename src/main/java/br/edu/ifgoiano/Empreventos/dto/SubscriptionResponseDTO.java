@@ -1,9 +1,11 @@
 package br.edu.ifgoiano.Empreventos.dto;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class SubscriptionResponseDTO {
+public class SubscriptionResponseDTO extends RepresentationModel<SubscriptionResponseDTO> {
     private Long id;
     private String status;
     private BigDecimal amountPaid;
