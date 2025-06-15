@@ -18,19 +18,19 @@ public class ActivityController {
 
     //Retorna a atividade com seus materiais
     @GetMapping("/{id}")
-    public ActivityResponseDTO findById(@PathVariable Integer id) {
+    public ActivityResponseDTO findById(@PathVariable Long id) {
         return activityService.findById(id);
     }
 
     @PutMapping("/{id}")
     public ActivityDTO update(
-            @PathVariable Integer id,
+            @PathVariable Long id,
             @Valid @RequestBody ActivityDTO atividadeDTO) {
         return activityService.update(id, atividadeDTO);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Integer id) {
+    public ResponseEntity<?> delete(@PathVariable Long id) {
         activityService.delete(id);
         return ResponseEntity.noContent().build();
     }

@@ -1,10 +1,12 @@
 package br.edu.ifgoiano.Empreventos.dto;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class EventResponseDTO {
+public class EventResponseDTO extends RepresentationModel<EventResponseDTO> {
     private Long id;
     private String title;
     private String description;
@@ -12,8 +14,8 @@ public class EventResponseDTO {
     private LocalDateTime endDate;
     private String location;
     private String status;
-    private List<ActivityResponseDTO> activities;
-    private List<RatingDTO> ratings;
+   // private List<ActivityResponseDTO> activities;
+    //private List<RatingDTO> ratings;
 
 
     public Long getId() {
@@ -72,7 +74,7 @@ public class EventResponseDTO {
         this.status = status;
     }
 
-    public List<ActivityResponseDTO> getActivities() {
+   /* public List<ActivityResponseDTO> getActivities() {
         return activities;
     }
 
@@ -87,4 +89,5 @@ public class EventResponseDTO {
     public void setAvaliacoes(List<RatingDTO> avaliacoes) {
         this.ratings = avaliacoes;
     }
+    */
 }

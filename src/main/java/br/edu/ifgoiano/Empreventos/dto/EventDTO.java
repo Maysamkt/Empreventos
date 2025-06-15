@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 public class EventDTO {
 
-    private Integer id;
+    private Long id;
 
     @NotBlank(message = "O título é obrigatório.")
     private String title;
@@ -37,11 +37,11 @@ public class EventDTO {
 
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

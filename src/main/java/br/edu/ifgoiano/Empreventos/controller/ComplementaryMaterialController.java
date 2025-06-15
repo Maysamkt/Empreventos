@@ -20,7 +20,7 @@ public class ComplementaryMaterialController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ComplementaryMaterialDTO addMaterial(
-            @PathVariable Integer activityId,
+            @PathVariable Long activityId,
             @Valid @RequestBody ComplementaryMaterialDTO materialDTO) {
 
         materialDTO.setActivityId(activityId);
@@ -29,19 +29,19 @@ public class ComplementaryMaterialController {
 
     @GetMapping
     public List<ComplementaryMaterialDTO> findMateriaisPorAtividade(
-            @PathVariable Integer activityId) {
+            @PathVariable Long activityId) {
         return materialService.findByAtividadeId(activityId);
     }
 
     @DeleteMapping("/{materialId}")
-    public ResponseEntity<?> deleteMaterial(@PathVariable Integer materialId) {
+    public ResponseEntity<?> deleteMaterial(@PathVariable Long materialId) {
         materialService.delete(materialId);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{materialId}")
     public ResponseEntity<ComplementaryMaterialDTO> updateMaterial(
-            @PathVariable Integer materialId,
+            @PathVariable Long materialId,
             @Valid @RequestBody ComplementaryMaterialDTO materialDTO) {
 
         var updatedMaterial = materialService.update(materialId, materialDTO);

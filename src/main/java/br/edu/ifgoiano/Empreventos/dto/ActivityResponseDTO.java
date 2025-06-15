@@ -4,18 +4,18 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class ActivityResponseDTO {
-    private Integer id;
+    private Long id;
     private String title;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
     private List<ComplementaryMaterialDTO> complementaryMaterials;
 
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

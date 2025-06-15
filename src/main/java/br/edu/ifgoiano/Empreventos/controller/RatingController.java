@@ -18,19 +18,19 @@ public class RatingController {
     private RatingService ratingService;
 
     @PostMapping("/subscriptions/{subscriptionId}/ratings")
-    public ResponseEntity<RatingDTO> create(@PathVariable Integer subscriptionId, @Valid @RequestBody RatingDTO ratingDTO) {
+    public ResponseEntity<RatingDTO> create(@PathVariable Long subscriptionId, @Valid @RequestBody RatingDTO ratingDTO) {
         var createdRating = ratingService.create(subscriptionId, ratingDTO);
         return new ResponseEntity<>(createdRating, HttpStatus.CREATED);
     }
 
     @GetMapping("/subscriptions/{subscriptionId}/ratings")
-    public ResponseEntity<List<RatingDTO>> findBySubscription(@PathVariable Integer subscriptionId) {
+    public ResponseEntity<List<RatingDTO>> findBySubscription(@PathVariable Long subscriptionId) {
         List<RatingDTO> ratings = ratingService.findBySubscriptionId(subscriptionId);
         return ResponseEntity.ok(ratings);
     }
 
     @DeleteMapping("/ratings/{ratingId}")
-    public ResponseEntity<Void> delete(@PathVariable Integer ratingId) {
+    public ResponseEntity<Void> delete(@PathVariable Long ratingId) {
         ratingService.delete(ratingId);
         return ResponseEntity.noContent().build();
     }

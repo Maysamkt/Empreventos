@@ -7,6 +7,6 @@ import java.util.List;
 
 @Repository
 
-public interface ComplementaryMaterialRepository extends JpaRepository<ComplementaryMaterial, Integer> {
-    List<ComplementaryMaterial> findByActivityId(Integer activityId);
+public interface ComplementaryMaterialRepository extends JpaRepository<ComplementaryMaterial, Long> {
+    List<ComplementaryMaterial> findByActivityId(Long activityId);
 }

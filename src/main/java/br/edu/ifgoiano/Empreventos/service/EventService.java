@@ -1,5 +1,6 @@
 package br.edu.ifgoiano.Empreventos.service;
 
+import br.edu.ifgoiano.Empreventos.controller.EventController;
 import br.edu.ifgoiano.Empreventos.dto.EventDTO;
 import br.edu.ifgoiano.Empreventos.dto.EventResponseDTO;
 import br.edu.ifgoiano.Empreventos.mapper.DataMapper;
@@ -10,6 +11,8 @@ import br.edu.ifgoiano.Empreventos.util.EventStatus;
 import br.edu.ifgoiano.Empreventos.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -24,18 +27,34 @@ public class EventService {
 
     private final Logger logger = Logger.getLogger(EventService.class.getName());
 
+    public EventResponseDTO findById(Long id) {
+        logger.info("Encontrando um Evento pelo ID!");
+
+        var eventEntity = eventRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Evento com ID " + id + " não encontrado."));
+        EventResponseDTO eventDTO = DataMapper.parseObject(eventEntity, EventResponseDTO.class);
+
+        // Adiciona um link para a coleção de todos os eventos
+        eventDTO.add(linkTo(methodOn(EventController.class).findAll()).withRel("all-events"));
+        // Adiciona um link para as atividades deste evento
+        eventDTO.add(linkTo(methodOn(EventController.class).findActivitiesByEvent(id)).withRel("activities"));
+
+        return DataMapper.parseObject(eventEntity, EventResponseDTO.class);
+    }
+
     public List<EventResponseDTO> findAll() {
         logger.info("Encontrando todos os eventos!");
         List<Event> events = eventRepository.findAll();
+
+        List<EventResponseDTO> eventDTOs = DataMapper.parseListObjects(events, EventResponseDTO.class);
+        // Adicionando links para cada evento na lista
+        for (EventResponseDTO event : eventDTOs) {
+            event.add(linkTo(methodOn(EventController.class).findById(event.getId())).withSelfRel());
+        }
+
         return DataMapper.parseListObjects(events, EventResponseDTO.class);
     }
 
-    public EventResponseDTO findById(Integer id) {
-        logger.info("Encontrando um Evento pelo ID!");
-        var event = eventRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Evento com ID " + id + " não encontrado."));
-        return DataMapper.parseObject(event, EventResponseDTO.class);
-    }
 
     public EventDTO create(EventDTO eventDTO) {
         logger.info("Criando um Evento!");
@@ -45,7 +64,7 @@ public class EventService {
         return DataMapper.parseObject(savedEvent, EventDTO.class);
     }
 
-    public EventDTO update(Integer id, EventDTO eventDTO) {
+    public EventDTO update(Long id, EventDTO eventDTO) {
         logger.info("Atualizando um Evento!");
         var event = eventRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Evento com ID " + id + " não encontrado."));
         event.setTitle(eventDTO.getTitle());
@@ -64,7 +83,7 @@ public class EventService {
         return DataMapper.parseObject(eventEntity, EventDTO.class);
     }
 
-    public void delete(Integer id) {
+    public void delete(Long id) {
         logger.info("Excluindo evento e suas dependências");
         var event = eventRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Evento com ID " + id + " não encontrado."));

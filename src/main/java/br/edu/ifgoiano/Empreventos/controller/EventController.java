@@ -34,17 +34,17 @@ public class EventController {
     }
 
     @GetMapping("/{id}")
-    public EventResponseDTO findById(@PathVariable Integer id) {
+    public EventResponseDTO findById(@PathVariable Long id) {
         return eventService.findById(id);
     }
 
     @PutMapping("/{id}")
-    public EventDTO update(@PathVariable Integer id, @Valid @RequestBody EventDTO eventDTO) {
+    public EventDTO update(@PathVariable Long id, @Valid @RequestBody EventDTO eventDTO) {
         return eventService.update(id, eventDTO);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Integer id) {
+    public ResponseEntity<?> delete(@PathVariable Long id) {
         eventService.delete(id);
         return ResponseEntity.noContent().build();
     }
@@ -52,15 +52,16 @@ public class EventController {
     // --- Endpoints de Atividades ---
     @PostMapping("/{eventId}/activities")
     @ResponseStatus(HttpStatus.CREATED)
-    public ActivityDTO addActivity(@PathVariable Integer eventId,
-            @Valid @RequestBody ActivityDTO activityDTO) {
+    public ActivityDTO addActivity(@PathVariable Long eventId,
+                                   @Valid
+                                   @RequestBody ActivityDTO activityDTO) {
         activityDTO.setEventId(eventId);
         return activityService.create(activityDTO);
     }
 
     @GetMapping("/{eventId}/activities")
     public List<ActivityResponseDTO> findActivitiesByEvent(
-            @PathVariable Integer eventId) {
+            @PathVariable Long eventId) {
         return activityService.findByEventoId(eventId);
     }
 }

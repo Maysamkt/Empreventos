@@ -28,18 +28,16 @@ public class SubscriptionService {
     @Autowired
     private UserRepository userRepository;
 
-    private  Subscription subscription;
 
     @Transactional
     public SubscriptionResponseDTO create(SubscriptionDTO subscriptionDTO) {
         var event = eventRepository.findById(subscriptionDTO.getEventId())
                 .orElseThrow(() -> new NoSuchElementException("Evento não encontrado com o ID: " + subscriptionDTO.getEventId()));
-
         // Busca o usuário (participante) pelo ID fornecido no DTO
         var listener = userRepository.findById(subscriptionDTO.getListenerId())
                 .orElseThrow(() -> new NoSuchElementException("Usuário (participante) não encontrado com o ID: " + subscriptionDTO.getListenerId()));
 
-
+        Subscription subscription = new Subscription();
         subscription.setEvent(event);
         subscription.setListener(listener);
         subscription.setAmountPaid(subscriptionDTO.getAmountPaid());
@@ -49,14 +47,14 @@ public class SubscriptionService {
         return toResponseDTO(savedSubscription);
     }
 
-    public SubscriptionResponseDTO findById(Integer id) {
+    public SubscriptionResponseDTO findById(Long id) {
         var subscription = subscriptionRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Inscrição não encontrada com o ID: " + id));
         return toResponseDTO(subscription);
     }
 
 
-    public SubscriptionResponseDTO cancel(Integer id) {
+    public SubscriptionResponseDTO cancel(Long id) {
         var subscription = subscriptionRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Inscrição não encontrada com o ID: " + id));
         subscription.setStatus(SubscriptionStatus.CANCELED);

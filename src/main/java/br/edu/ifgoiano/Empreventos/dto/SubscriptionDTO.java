@@ -8,29 +8,29 @@ import java.math.BigDecimal;
 public class SubscriptionDTO {
 
     @NotNull(message = "O ID do evento é obrigatório.")
-    private Integer eventId;
+    private Long eventId;
 
     @NotNull(message = "O ID do participante é obrigatório.")
-    private Integer listenerId;
+    private Long listenerId;
 
     @NotNull(message = "O valor pago é obrigatório.")
     @PositiveOrZero(message = "O valor pago deve ser zero ou maior.")
     private BigDecimal amountPaid;
 
 
-    public Integer getEventId() {
+    public Long getEventId() {
         return eventId;
     }
 
-    public void setEventId(Integer eventId) {
+    public void setEventId(Long eventId) {
         this.eventId = eventId;
     }
 
-    public Integer getListenerId() {
+    public Long getListenerId() {
         return listenerId;
     }
 
-    public void setListenerId(Integer listenerId) {
+    public void setListenerId(Long listenerId) {
         this.listenerId = listenerId;
     }
 
