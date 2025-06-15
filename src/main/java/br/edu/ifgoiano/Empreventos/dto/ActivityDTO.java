@@ -7,9 +7,9 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime; // ALTERADO
 
 public class ActivityDTO {
-    private Integer id;
+    private Long id;
 
-    private Integer eventId;
+    private Long eventId;
 
     @NotBlank(message = "O título da atividade é obrigatório.")
     private String title;
@@ -24,23 +24,23 @@ public class ActivityDTO {
     private LocalDateTime endDateTime;
 
     private String location;
-    private Integer hoursCertified;
+    private Long hoursCertified;
     private boolean isPublished;
 
 
-    public Integer getEventId() {
+    public Long getEventId() {
         return eventId;
     }
 
-    public void setEventId(Integer eventId) {
+    public void setEventId(Long eventId) {
         this.eventId = eventId;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -84,11 +84,11 @@ public class ActivityDTO {
         this.location = location;
     }
 
-    public Integer getHoursCertified() {
+    public Long getHoursCertified() {
         return hoursCertified;
     }
 
-    public void setHoursCertified(Integer hoursCertified) {
+    public void setHoursCertified(Long hoursCertified) {
         this.hoursCertified = hoursCertified;
     }
 

@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 public class SubscriptionDTO {
 
     @NotNull(message = "O ID do evento é obrigatório.")
-    private Integer eventId;
+    private Long eventId;
 
     @NotNull(message = "O ID do participante é obrigatório.")
     private Long listenerId;
@@ -18,11 +18,11 @@ public class SubscriptionDTO {
     private BigDecimal amountPaid;
 
 
-    public Integer getEventId() {
+    public Long getEventId() {
         return eventId;
     }
 
-    public void setEventId(Integer eventId) {
+    public void setEventId(Long eventId) {
         this.eventId = eventId;
     }
 

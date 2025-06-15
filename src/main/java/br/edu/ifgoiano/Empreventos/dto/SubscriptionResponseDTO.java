@@ -1,24 +1,26 @@
 package br.edu.ifgoiano.Empreventos.dto;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class SubscriptionResponseDTO {
-    private Integer id;
+public class SubscriptionResponseDTO extends RepresentationModel<SubscriptionResponseDTO> {
+    private Long id;
     private String status;
     private BigDecimal amountPaid;
     private LocalDateTime createdAt;
-    private Integer eventId;
+    private Long eventId;
     private String eventTitle;
     private Long listenerId;
     private String listenerName;
 
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -46,11 +48,11 @@ public class SubscriptionResponseDTO {
         this.createdAt = createdAt;
     }
 
-    public Integer getEventId() {
+    public Long getEventId() {
         return eventId;
     }
 
-    public void setEventId(Integer eventId) {
+    public void setEventId(Long eventId) {
         this.eventId = eventId;
     }
 

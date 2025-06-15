@@ -31,12 +31,12 @@ public class RatingService {
         return DataMapper.parseObject(savedRating, RatingDTO.class);
     }
 
-    public List<RatingDTO> findBySubscriptionId(Integer subscriptionId) {
+    public List<RatingDTO> findBySubscriptionId(Long subscriptionId) {
         var ratings = ratingRepository.findBySubscriptionId(subscriptionId);
         return DataMapper.parseListObjects(ratings, RatingDTO.class);
     }
 
-    public void delete(Integer ratingId) {
+    public void delete(Long ratingId) {
         var rating = ratingRepository.findById(ratingId)
                 .orElseThrow(() -> new NoSuchElementException("Avaliação com ID " + ratingId + " não encontrada."));
         rating.setDeletedAt(LocalDateTime.now());

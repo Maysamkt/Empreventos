@@ -6,9 +6,9 @@ import org.hibernate.validator.constraints.URL;
 
 public class ComplementaryMaterialDTO {
 
-    private Integer id;
+    private Long id;
 
-    private Integer activityId;
+    private Long activityId;
 
     @NotBlank(message = "O título do material é obrigatório.")
     private String title;
@@ -20,11 +20,11 @@ public class ComplementaryMaterialDTO {
     private MaterialType materialType;
 
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -60,11 +60,11 @@ public class ComplementaryMaterialDTO {
         this.materialType = materialType;
     }
 
-    public Integer getActivityId() {
+    public Long getActivityId() {
         return activityId;
     }
 
-    public void setActivityId(Integer activityId) {
+    public void setActivityId(Long activityId) {
         this.activityId = activityId;
     }
 

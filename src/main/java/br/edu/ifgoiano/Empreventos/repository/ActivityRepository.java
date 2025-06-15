@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ActivityRepository extends JpaRepository<Activity, Integer> {
-    List<Activity> findByEventId(Integer eventId);
+public interface ActivityRepository extends JpaRepository<Activity, Long> {
+    List<Activity> findByEventId(Long eventId);
 }

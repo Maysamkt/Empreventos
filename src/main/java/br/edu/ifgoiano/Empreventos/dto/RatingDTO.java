@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 
 public class RatingDTO {
 
-    private Integer id;
+    private Long id;
 
     @NotNull(message = "O ID da inscrição é obrigatório.")
     private Long subscriptionId;
@@ -22,11 +22,11 @@ public class RatingDTO {
 
 
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

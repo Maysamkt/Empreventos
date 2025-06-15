@@ -16,7 +16,7 @@ public class Rating implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(nullable = false)
     private int score;
@@ -39,11 +39,11 @@ public class Rating implements Serializable {
     @JoinColumn(name = "subscription_id", nullable = false)
     private Subscription subscription;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

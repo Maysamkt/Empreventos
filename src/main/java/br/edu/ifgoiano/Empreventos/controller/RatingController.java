@@ -24,13 +24,13 @@ public class RatingController {
     }
 
     @GetMapping("/subscriptions/{subscriptionId}/ratings")
-    public ResponseEntity<List<RatingDTO>> findBySubscription(@PathVariable Integer subscriptionId) {
+    public ResponseEntity<List<RatingDTO>> findBySubscription(@PathVariable Long subscriptionId) {
         List<RatingDTO> ratings = ratingService.findBySubscriptionId(subscriptionId);
         return ResponseEntity.ok(ratings);
     }
 
     @DeleteMapping("/ratings/{ratingId}")
-    public ResponseEntity<Void> delete(@PathVariable Integer ratingId) {
+    public ResponseEntity<Void> delete(@PathVariable Long ratingId) {
         ratingService.delete(ratingId);
         return ResponseEntity.noContent().build();
     }
