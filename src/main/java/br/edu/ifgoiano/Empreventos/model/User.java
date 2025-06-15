@@ -1,6 +1,9 @@
 package br.edu.ifgoiano.Empreventos.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -12,7 +15,10 @@ import java.util.Set;
 @Entity
 @Table(name = "user")
 public class User implements Serializable {
+
+
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,11 +27,11 @@ public class User implements Serializable {
     private String name;
     @Column(nullable = false, length = 255)
     private String password;
-    @Column(length = 20, unique = true)
+    @Column(name = "cpf_cnpj", length = 20, unique = true)
     private String cpf_cnpj;
     @Column(nullable = false, length = 100, unique = true)
     private String email;
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 100)
     private String phone_number;
     @Column(nullable = false)
     private Boolean active;
@@ -48,15 +54,19 @@ public class User implements Serializable {
 
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("user")
     private Set<UserRole> userRoles = new HashSet<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("user")
     private SpeakerDetails speakerDetails;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("user")
     private ListenerDetails listenerDetails;
 
     //@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+   // @JsonIgnoreProperties("user")
     //private OrganizerDetails organizerDetails;
 
     // Métodos utilitários
@@ -219,12 +229,12 @@ public class User implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(password, user.password) && Objects.equals(cpf_cnpj, user.cpf_cnpj) && Objects.equals(email, user.email) && Objects.equals(phone_number, user.phone_number) && Objects.equals(active, user.active) && Objects.equals(avatar_url, user.avatar_url) && Objects.equals(bio, user.bio) && Objects.equals(created_at, user.created_at) && Objects.equals(updated_at, user.updated_at) && Objects.equals(deleted_at, user.deleted_at) && Objects.equals(userRoles, user.userRoles);
+        return Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(password, user.password) && Objects.equals(cpf_cnpj, user.cpf_cnpj) && Objects.equals(email, user.email) && Objects.equals(phone_number, user.phone_number) && Objects.equals(active, user.active) && Objects.equals(avatar_url, user.avatar_url) && Objects.equals(bio, user.bio) && Objects.equals(created_at, user.created_at) && Objects.equals(updated_at, user.updated_at) && Objects.equals(deleted_at, user.deleted_at);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, password, cpf_cnpj, email, phone_number, active, avatar_url, bio, created_at, updated_at, deleted_at, userRoles);
+        return Objects.hash(id, name, password, cpf_cnpj, email, phone_number, active, avatar_url, bio, created_at, updated_at, deleted_at);
     }
 
     @Override
@@ -242,7 +252,6 @@ public class User implements Serializable {
                 ", created_at=" + created_at +
                 ", updated_at=" + updated_at +
                 ", deleted_at=" + deleted_at +
-                ", userRoles=" + userRoles +
                 '}';
     }
 }

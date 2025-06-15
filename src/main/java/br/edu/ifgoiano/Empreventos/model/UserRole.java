@@ -1,5 +1,8 @@
 package br.edu.ifgoiano.Empreventos.model;
 
+
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -13,11 +16,13 @@ public class UserRole {
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnoreProperties({"userRoles", "speakerDetails", "listenerDetails"})
     private User user;
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", nullable = false)
+    @JsonIgnoreProperties("userRoles")
     private Role role;
 
     @Column(name = "created_at", updatable = false)
