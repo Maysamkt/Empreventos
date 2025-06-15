@@ -38,4 +38,13 @@ public class ComplementaryMaterialController {
         materialService.delete(materialId);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{materialId}")
+    public ResponseEntity<ComplementaryMaterialDTO> updateMaterial(
+            @PathVariable Integer materialId,
+            @Valid @RequestBody ComplementaryMaterialDTO materialDTO) {
+
+        var updatedMaterial = materialService.update(materialId, materialDTO);
+        return ResponseEntity.ok(updatedMaterial);
+    }
 }

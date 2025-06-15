@@ -45,4 +45,12 @@ public class RatingDTO {
     public void setComment(String comment) {
         this.comment = comment;
     }
+
+    public Integer getSubscriptionId() {
+        return subscriptionId;
+    }
+
+    public void setSubscriptionId(Integer subscriptionId) {
+        this.subscriptionId = subscriptionId;
+    }
 }

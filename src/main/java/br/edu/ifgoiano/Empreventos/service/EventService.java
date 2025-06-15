@@ -3,6 +3,8 @@ package br.edu.ifgoiano.Empreventos.service;
 import br.edu.ifgoiano.Empreventos.dto.EventDTO;
 import br.edu.ifgoiano.Empreventos.dto.EventResponseDTO;
 import br.edu.ifgoiano.Empreventos.mapper.DataMapper;
+import br.edu.ifgoiano.Empreventos.model.Activity;
+import br.edu.ifgoiano.Empreventos.model.ComplementaryMaterial;
 import br.edu.ifgoiano.Empreventos.model.Event;
 import br.edu.ifgoiano.Empreventos.util.EventStatus;
 import br.edu.ifgoiano.Empreventos.repository.EventRepository;
@@ -63,10 +65,26 @@ public class EventService {
     }
 
     public void delete(Integer id) {
-        logger.info("Excluindo evento");
+        logger.info("Excluindo evento e suas dependências");
         var event = eventRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Evento com ID " + id + " não encontrado."));
         event.setDeletedAt(java.time.LocalDateTime.now());
         eventRepository.save(event);
+
+        // Propagar a exclusão para as atividades e materiais em cascata
+        if (event.getActivities() != null) {
+            for (Activity activity : event.getActivities()) {
+                // Marca a atividade como deletada
+                activity.setDeletedAt(java.time.LocalDateTime.now());
+
+                // Marcar os materiais complementares da atividade como deletados
+                if (activity.getComplementaryMaterials() != null) {
+                    for (ComplementaryMaterial material : activity.getComplementaryMaterials()) {
+                        material.setDeletedAt(java.time.LocalDateTime.now());
+                    }
+                }
+            }
+            eventRepository.save(event);
+        }
     }
 }
