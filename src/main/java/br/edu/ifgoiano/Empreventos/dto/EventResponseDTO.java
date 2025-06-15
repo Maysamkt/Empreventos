@@ -1,0 +1,90 @@
+package br.edu.ifgoiano.Empreventos.dto;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
+public class EventResponseDTO {
+    private Long id;
+    private String title;
+    private String description;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+    private String location;
+    private String status;
+    private List<ActivityResponseDTO> activities;
+    private List<RatingDTO> ratings;
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public LocalDateTime getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public List<ActivityResponseDTO> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(List<ActivityResponseDTO> activities) {
+        this.activities = activities;
+    }
+
+    public List<RatingDTO> getAvaliacoes() {
+        return ratings;
+    }
+
+    public void setAvaliacoes(List<RatingDTO> avaliacoes) {
+        this.ratings = avaliacoes;
+    }
+}
