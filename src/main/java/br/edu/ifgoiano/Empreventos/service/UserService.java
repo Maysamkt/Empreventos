@@ -48,7 +48,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserResponseDTO findById(Long id) {
         logger.info("Buscando usuário por ID: " + id);
-        User user = userRepository.findById(id)
+        User user = userRepository.findActiveById(id)
                 .orElseThrow(() -> new NoSuchElementException("Usuário com ID " + id + " não encontrado"));
         return userMapper.toResponseDTO(user);
     }
@@ -112,9 +112,7 @@ public class UserService {
         if (userRepository.existsByEmail(userRequestDTO.getEmail())) {
             throw new IllegalArgumentException("Email já está em uso");
         }
-//        if (userRepository.existsByCpfCnpj(userRequestDTO.getCpf_cnpj())) {
-//            throw new IllegalArgumentException("CPF/CNPJ já está em uso");
-//        }
+
         if (userRequestDTO.getRoles() == null || userRequestDTO.getRoles().isEmpty()) {
             throw new IllegalArgumentException("Pelo menos uma role deve ser especificada");
         }
