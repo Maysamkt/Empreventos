@@ -8,8 +8,10 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @RestController
@@ -22,10 +24,27 @@ public class EventController {
     @Autowired
     private ActivityService activityService;
 
+    @Autowired
+    private RatingService ratingService;
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ORGANIZER')")
     public EventDTO create(@Valid @RequestBody EventDTO eventDTO) {
         return eventService.create(eventDTO);
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ORGANIZER')")
+    public EventDTO update(@PathVariable Long id, @Valid @RequestBody EventDTO eventDTO) throws AccessDeniedException {
+        return eventService.update(id, eventDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ORGANIZER')")
+    public ResponseEntity<?> delete(@PathVariable Long id) throws AccessDeniedException {
+        eventService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping
@@ -38,23 +57,17 @@ public class EventController {
         return eventService.findById(id);
     }
 
-    @PutMapping("/{id}")
-    public EventDTO update(@PathVariable Long id, @Valid @RequestBody EventDTO eventDTO) {
-        return eventService.update(id, eventDTO);
+    @GetMapping("/{eventId}/ratings")
+    public ResponseEntity<List<RatingDTO>> findRatingsByEvent(@PathVariable Long eventId) {
+        List<RatingDTO> ratings = ratingService.findByEventId(eventId);
+        return ResponseEntity.ok(ratings);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
-        eventService.delete(id);
-        return ResponseEntity.noContent().build();
-    }
 
     // --- Endpoints de Atividades ---
     @PostMapping("/{eventId}/activities")
     @ResponseStatus(HttpStatus.CREATED)
-    public ActivityDTO addActivity(@PathVariable Long eventId,
-                                   @Valid
-                                   @RequestBody ActivityDTO activityDTO) {
+    public ActivityDTO addActivity(@PathVariable Long eventId, @Valid @RequestBody ActivityDTO activityDTO) {
         activityDTO.setEventId(eventId);
         return activityService.create(activityDTO);
     }

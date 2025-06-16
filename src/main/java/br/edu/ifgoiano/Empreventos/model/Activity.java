@@ -56,6 +56,10 @@ public class Activity implements Serializable {
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "speaker_id", nullable = true) // Pode ser nulo se a atividade não tiver palestrante
+    private User speaker;
+
     @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL)
     private List<ComplementaryMaterial> complementaryMaterials;
 
@@ -153,6 +157,14 @@ public class Activity implements Serializable {
 
     public void setEvent(Event event) {
         this.event = event;
+    }
+
+    public User getSpeaker() {
+        return speaker;
+    }
+
+    public void setSpeaker(User speaker) {
+        this.speaker = speaker;
     }
 
     public List<ComplementaryMaterial> getComplementaryMaterials() {

@@ -14,6 +14,8 @@ public class EventResponseDTO extends RepresentationModel<EventResponseDTO> {
     private LocalDateTime endDate;
     private String location;
     private String status;
+    private Long organizerId;
+    private String organizerName;
 
 
     public Long getId() {
@@ -72,4 +74,19 @@ public class EventResponseDTO extends RepresentationModel<EventResponseDTO> {
         this.status = status;
     }
 
+    public Long getOrganizerId() {
+        return organizerId;
+    }
+
+    public void setOrganizerId(Long organizerId) {
+        this.organizerId = organizerId;
+    }
+
+    public String getOrganizerName() {
+        return organizerName;
+    }
+
+    public void setOrganizerName(String organizerName) {
+        this.organizerName = organizerName;
+    }
 }

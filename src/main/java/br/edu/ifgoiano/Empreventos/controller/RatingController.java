@@ -6,12 +6,13 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/rating")
+@RequestMapping("/api")
 public class RatingController {
 
     @Autowired
@@ -21,6 +22,13 @@ public class RatingController {
     public ResponseEntity<RatingDTO> create(@PathVariable Long subscriptionId, @Valid @RequestBody RatingDTO ratingDTO) {
         var createdRating = ratingService.create(subscriptionId, ratingDTO);
         return new ResponseEntity<>(createdRating, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/ratings/{ratingId}")
+    public ResponseEntity<RatingDTO> findRatingById(@PathVariable Long ratingId) {
+        RatingDTO rating = new RatingDTO();
+        rating.setId(ratingId);
+        return ResponseEntity.ok(rating);
     }
 
     @GetMapping("/subscriptions/{subscriptionId}/ratings")
@@ -34,4 +42,11 @@ public class RatingController {
         ratingService.delete(ratingId);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{ratingId}")
+    public ResponseEntity<RatingDTO> update(@PathVariable Long ratingId, @Valid @RequestBody RatingDTO ratingDTO) {
+        var updatedRating = ratingService.update(ratingId, ratingDTO);
+        return ResponseEntity.ok(updatedRating);
+    }
+
 }

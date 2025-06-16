@@ -16,7 +16,6 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "invoice")
-@IdClass(Invoice.InvoiceId.class)
 public class Invoice implements Serializable {
 
     @Serial
@@ -26,18 +25,9 @@ public class Invoice implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Id
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnoreProperties({"Invoice"})
-    private User user;
-
-    @Id
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "plan_id", nullable = false)
-    @JsonIgnoreProperties("Invoice")
-    private Plan plan;
-
+    @JoinColumn(name = "user_plan_id", nullable = false)
+    private UserPlan userPlan;
 
     @Column(name = "issue_date", nullable = false)
     private LocalDateTime issue_date;
@@ -92,22 +82,13 @@ public class Invoice implements Serializable {
 
     public Invoice () {}
 
-    public Invoice(Long id, User user, Plan plan, LocalDateTime issue_date, LocalDateTime due_date, BigDecimal amount, InvoiceStatus status, PaymentMethod payment_method, LocalDateTime payment_date, String gateway_id, String billing_cycle, BigDecimal discount, LocalDateTime created_at, LocalDateTime updated_at, LocalDateTime deleted_at) {
+    public Invoice(Long id, UserPlan userPlan, LocalDateTime issue_date, LocalDateTime due_date, BigDecimal amount, InvoiceStatus status) {
         this.id = id;
-        this.user = user;
-        this.plan = plan;
+        this.userPlan = userPlan;
         this.issue_date = issue_date;
         this.due_date = due_date;
         this.amount = amount;
         this.status = status;
-        this.payment_method = payment_method;
-        this.payment_date = payment_date;
-        this.gateway_id = gateway_id;
-        this.billing_cycle = billing_cycle;
-        this.discount = discount;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
-        this.deleted_at = deleted_at;
     }
 
     public Long getId() {
@@ -117,21 +98,12 @@ public class Invoice implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-
-    public User getUser() {
-        return user;
+    public UserPlan getUserPlan() {
+        return userPlan;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Plan getPlan() {
-        return plan;
-    }
-
-    public void setPlan(Plan plan) {
-        this.plan = plan;
+    public void setUserPlan(UserPlan userPlan) {
+        this.userPlan = userPlan;
     }
 
     public LocalDateTime getIssue_date() {
@@ -235,45 +207,24 @@ public class Invoice implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Invoice invoice = (Invoice) o;
-        return Objects.equals(id, invoice.id) && Objects.equals(user, invoice.user) && Objects.equals(plan, invoice.plan) && Objects.equals(issue_date, invoice.issue_date) && Objects.equals(due_date, invoice.due_date) && Objects.equals(amount, invoice.amount) && status == invoice.status && payment_method == invoice.payment_method && Objects.equals(payment_date, invoice.payment_date) && Objects.equals(gateway_id, invoice.gateway_id) && Objects.equals(billing_cycle, invoice.billing_cycle) && Objects.equals(discount, invoice.discount) && Objects.equals(created_at, invoice.created_at) && Objects.equals(updated_at, invoice.updated_at) && Objects.equals(deleted_at, invoice.deleted_at);
+        return Objects.equals(id, invoice.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, user, plan, issue_date, due_date, amount, status, payment_method, payment_date, gateway_id, billing_cycle, discount, created_at, updated_at, deleted_at);
+        return Objects.hash(id);
     }
 
     @Override
     public String toString() {
         return "Invoice{" +
                 "id=" + id +
-                ", user=" + user +
-                ", plan=" + plan +
+                ", userPlan=" + (userPlan != null ? userPlan.getId() : "null") + // Mostra o ID do UserPlan
                 ", issue_date=" + issue_date +
                 ", due_date=" + due_date +
                 ", amount=" + amount +
                 ", status=" + status +
                 ", payment_method=" + payment_method +
-                ", payment_date=" + payment_date +
-                ", gateway_id='" + gateway_id + '\'' +
-                ", billing_cycle='" + billing_cycle + '\'' +
-                ", discount=" + discount +
-                ", created_at=" + created_at +
-                ", updated_at=" + updated_at +
-                ", deleted_at=" + deleted_at +
                 '}';
-    }
-
-    public static class InvoiceId implements Serializable {
-        private Long user;
-        private Long plan;
-
-        public InvoiceId() {
-        }
-
-        public InvoiceId(Long user, Byte role) {
-            this.user = user;
-            this.plan = plan;
-        }
     }
 }

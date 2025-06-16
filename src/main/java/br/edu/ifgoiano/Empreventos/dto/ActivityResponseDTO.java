@@ -7,10 +7,18 @@ import java.util.List;
 
 public class ActivityResponseDTO extends RepresentationModel<ActivityResponseDTO> {
     private Long id;
+    private String speakerName;
     private String title;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
 
+    public String getSpeakerName() {
+        return speakerName;
+    }
+
+    public void setSpeakerName(String speakerName) {
+        this.speakerName = speakerName;
+    }
 
     public Long getId() {
         return id;

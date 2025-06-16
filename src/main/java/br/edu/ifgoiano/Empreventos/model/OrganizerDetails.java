@@ -18,7 +18,6 @@ public class OrganizerDetails implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long user_id;
 
     @OneToOne
@@ -49,15 +48,6 @@ public class OrganizerDetails implements Serializable {
     @Column(name = "deleted_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime deleted_at;
-
-    @OneToMany(mappedBy = "organizerDetails", cascade = CascadeType.ALL)
-    private List<Event> event;
-
-    @OneToMany(mappedBy = "organizerDetails", cascade = CascadeType.ALL)
-    private List<Invoice> invoice;
-
-    @OneToOne(mappedBy = "organizerDetails")
-    private Plan plan;
 
     @PrePersist
     protected void onCreate() {

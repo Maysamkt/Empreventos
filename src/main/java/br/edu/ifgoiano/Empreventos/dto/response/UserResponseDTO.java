@@ -18,13 +18,8 @@ public class UserResponseDTO  implements Serializable {
     private String email;
     private String phoneNumber;
     private Boolean active;
-    private String avatarUrl;
     private String bio;
     private List<String> roles;
-
-
-
-
 
 
     public Long getId() {
@@ -65,14 +60,6 @@ public class UserResponseDTO  implements Serializable {
 
     public void setActive(Boolean active) {
         this.active = active;
-    }
-
-    public String getAvatarUrl() {
-        return avatarUrl;
-    }
-
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
     }
 
     public String getBio() {

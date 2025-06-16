@@ -17,19 +17,11 @@ public class UserPlan implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
-
-    @Column(name = "plan_id", nullable = false)
-    private Long planId;
-
     @OneToOne
-    @MapsId
     @JoinColumn(name = "user_id")
     private User user;
 
     @OneToOne
-    @MapsId
     @JoinColumn(name = "plan_id")
     private Plan plan;
 
@@ -58,10 +50,8 @@ public class UserPlan implements Serializable {
 
     public UserPlan () {}
 
-    public UserPlan(Long id, Long userId, Long planId, User user, Plan plan, LocalDateTime start_date, LocalDateTime end_date, LocalDateTime last_payment, LocalDateTime next_payment, LocalDateTime created_at, LocalDateTime updated_at, LocalDateTime deleted_at) {
+    public UserPlan(Long id, User user, Plan plan, LocalDateTime start_date, LocalDateTime end_date, LocalDateTime last_payment, LocalDateTime next_payment, LocalDateTime created_at, LocalDateTime updated_at, LocalDateTime deleted_at) {
         this.id = id;
-        this.userId = userId;
-        this.planId = planId;
         this.user = user;
         this.plan = plan;
         this.start_date = start_date;
@@ -79,22 +69,6 @@ public class UserPlan implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Long getPlanId() {
-        return planId;
-    }
-
-    public void setPlanId(Long planId) {
-        this.planId = planId;
     }
 
     public User getUser() {
@@ -174,11 +148,11 @@ public class UserPlan implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserPlan userPlan = (UserPlan) o;
-        return Objects.equals(id, userPlan.id) && Objects.equals(userId, userPlan.userId) && Objects.equals(planId, userPlan.planId) && Objects.equals(user, userPlan.user) && Objects.equals(plan, userPlan.plan) && Objects.equals(start_date, userPlan.start_date) && Objects.equals(end_date, userPlan.end_date) && Objects.equals(last_payment, userPlan.last_payment) && Objects.equals(next_payment, userPlan.next_payment) && Objects.equals(created_at, userPlan.created_at) && Objects.equals(updated_at, userPlan.updated_at) && Objects.equals(deleted_at, userPlan.deleted_at);
+        return Objects.equals(id, userPlan.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId, planId, user, plan, start_date, end_date, last_payment, next_payment, created_at, updated_at, deleted_at);
+        return Objects.hash(id);
     }
 }

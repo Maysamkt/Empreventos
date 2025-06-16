@@ -6,12 +6,14 @@ import br.edu.ifgoiano.Empreventos.dto.SubscriptionDTO;
 import br.edu.ifgoiano.Empreventos.dto.SubscriptionResponseDTO;
 import br.edu.ifgoiano.Empreventos.mapper.DataMapper;
 import br.edu.ifgoiano.Empreventos.model.Subscription;
+import br.edu.ifgoiano.Empreventos.security.jwt.UserDetailsImpl;
 import br.edu.ifgoiano.Empreventos.util.SubscriptionStatus;
 import br.edu.ifgoiano.Empreventos.model.User;
 import br.edu.ifgoiano.Empreventos.repository.EventRepository;
 import br.edu.ifgoiano.Empreventos.repository.SubscriptionRepository;
 import br.edu.ifgoiano.Empreventos.repository.UserRepository; // Você precisará deste repositório
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,17 +38,17 @@ public class SubscriptionService {
 
     @Transactional
     public SubscriptionResponseDTO create(SubscriptionDTO subscriptionDTO) {
+        UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var listener = userRepository.findById(userDetails.getId())
+                .orElseThrow(() -> new NoSuchElementException("Usuário (participante) não encontrado."));
         var event = eventRepository.findById(subscriptionDTO.getEventId())
                 .orElseThrow(() -> new NoSuchElementException("Evento não encontrado com o ID: " + subscriptionDTO.getEventId()));
-        // Busca o usuário (participante) pelo ID fornecido no DTO
-        var listener = userRepository.findById(subscriptionDTO.getListenerId())
-                .orElseThrow(() -> new NoSuchElementException("Usuário (participante) não encontrado com o ID: " + subscriptionDTO.getListenerId()));
 
         Subscription subscription = new Subscription();
         subscription.setEvent(event);
         subscription.setListener(listener);
         subscription.setAmountPaid(subscriptionDTO.getAmountPaid());
-        subscription.setStatus(SubscriptionStatus.PENDING);
+        subscription.setStatus(SubscriptionStatus.CONFIRMED);
 
         var savedSubscription = subscriptionRepository.save(subscription);
         return toResponseDTO(savedSubscription);
@@ -79,7 +81,7 @@ public class SubscriptionService {
         dto.setListenerName(subscription.getListener().getName());
         dto.setStatus(subscription.getStatus().name());
 
-        // Adicionando links HATEOAS
+        //links HATEOAS
         // Link para o próprio recurso (self)
         dto.add(linkTo(methodOn(SubscriptionController.class).findById(dto.getId())).withSelfRel());
 

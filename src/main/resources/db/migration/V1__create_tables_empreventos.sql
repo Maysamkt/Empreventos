@@ -83,10 +83,13 @@ CREATE TABLE IF NOT EXISTS `event` (
     `capacity` INT NOT NULL,
     `status` ENUM('DRAFT', 'PUBLISHED', 'CANCELED', 'COMPLETED') NOT NULL DEFAULT 'DRAFT',
     `registration_value` DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    `organizer_id` INT NOT NULL,
     `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
     `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `deleted_at` DATETIME NULL DEFAULT NULL,
-    CONSTRAINT `chk_dates` CHECK ( `end_date` > `start_date` )
+    CONSTRAINT `chk_dates` CHECK ( `end_date` > `start_date` ),
+     CONSTRAINT `fk_event_organizer`
+            FOREIGN KEY (`organizer_id`) REFERENCES `user` (`id`)
 
 )ENGINE=InnoDB;
 
@@ -137,6 +140,7 @@ CREATE TABLE IF NOT EXISTS `certificate` (
 CREATE TABLE IF NOT EXISTS `activity` (
     `id`INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `event_id` INT NOT NULL,
+    `speaker_id` INT NULL,
     `title` VARCHAR(100) NOT NULL,
     `description` TEXT,
     `start_date_time` DATETIME NOT NULL,
@@ -149,8 +153,11 @@ CREATE TABLE IF NOT EXISTS `activity` (
     `deleted_at` DATETIME NULL DEFAULT NULL,
     CONSTRAINT `fk_activity_event`
         FOREIGN KEY (`event_id`) REFERENCES `event` (`id`),
+    CONSTRAINT `fk_activity_speaker`
+        FOREIGN KEY (`speaker_id`) REFERENCES `user` (`id`),
     CONSTRAINT `chk_activity_dates`
         CHECK (`end_date_time` > `start_date_time`)
+
 )ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `complementary_material` (

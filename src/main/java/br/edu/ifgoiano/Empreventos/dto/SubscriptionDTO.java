@@ -10,9 +10,6 @@ public class SubscriptionDTO {
     @NotNull(message = "O ID do evento é obrigatório.")
     private Long eventId;
 
-    @NotNull(message = "O ID do participante é obrigatório.")
-    private Long listenerId;
-
     @NotNull(message = "O valor pago é obrigatório.")
     @PositiveOrZero(message = "O valor pago deve ser zero ou maior.")
     private BigDecimal amountPaid;
@@ -24,14 +21,6 @@ public class SubscriptionDTO {
 
     public void setEventId(Long eventId) {
         this.eventId = eventId;
-    }
-
-    public Long getListenerId() {
-        return listenerId;
-    }
-
-    public void setListenerId(Long listenerId) {
-        this.listenerId = listenerId;
     }
 
     public BigDecimal getAmountPaid() {
