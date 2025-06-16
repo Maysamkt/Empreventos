@@ -1,18 +1,24 @@
 package br.edu.ifgoiano.Empreventos.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "organizer_details")
+@Table (name = "organizer_details")
 public class OrganizerDetails implements Serializable {
+
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
-    @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long user_id;
 
     @OneToOne
@@ -22,24 +28,36 @@ public class OrganizerDetails implements Serializable {
 
     @Column(name = "company_name", nullable = false, length = 100)
     private String company_name;
-    @Column(nullable = false, length = 100)
+
+    @Column(name = "brand", nullable = false, length = 100)
     private String brand;
-    @Column(nullable = false, length = 100)
+
+    @Column(name = "industry_of_business", nullable = false, length = 100)
     private String industry_of_business;
-    @Column(nullable = false, length = 100)
+
+    @Column(name = "website", nullable = false, length = 100)
     private String website;
 
-    @Column(name = "created_at", updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime created_at;
 
-    @Column(name = "updated_at")
-    @Temporal(TemporalType.TIMESTAMP)
+    @UpdateTimestamp
+    @Column(name = "updated_at", nullable = false)
     private LocalDateTime updated_at;
 
-    @Column(name = "deleted_at")
+    @Column(name = "deleted_at", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime deleted_at;
+
+    @OneToMany(mappedBy = "organizerDetails", cascade = CascadeType.ALL)
+    private List<Event> event;
+
+    @OneToMany(mappedBy = "organizerDetails", cascade = CascadeType.ALL)
+    private List<Invoice> invoice;
+
+    @OneToOne(mappedBy = "organizerDetails")
+    private Plan plan;
 
     @PrePersist
     protected void onCreate() {
@@ -166,3 +184,4 @@ public class OrganizerDetails implements Serializable {
                 '}';
     }
 }
+

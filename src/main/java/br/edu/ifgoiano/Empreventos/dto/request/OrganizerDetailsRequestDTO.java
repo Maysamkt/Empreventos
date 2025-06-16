@@ -1,0 +1,64 @@
+package br.edu.ifgoiano.Empreventos.dto.request;
+
+import java.time.LocalDateTime;
+
+public class OrganizerDetailsRequestDTO {
+
+    private Long user_id;
+    private String companyName;
+    private String brand;
+    private String industryOfBusiness;
+    private String website;
+
+    public OrganizerDetailsRequestDTO() {
+
+    }
+
+    public OrganizerDetailsRequestDTO(Long user_id, String companyName, String brand, String industryOfBusiness, String website, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+        this.user_id = user_id;
+        this.companyName = companyName;
+        this.brand = brand;
+        this.industryOfBusiness = industryOfBusiness;
+        this.website = website;
+    }
+
+    public Long getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(Long user_id) {
+        this.user_id = user_id;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public String getIndustryOfBusiness() {
+        return industryOfBusiness;
+    }
+
+    public void setIndustryOfBusiness(String industryOfBusiness) {
+        this.industryOfBusiness = industryOfBusiness;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+}
