@@ -19,6 +19,7 @@ public class UserMapper {
 
     private final SpeakerDetailsMapper speakerDetailsMapper;
     private final ListenerDetailsMapper listenerDetailsMapper;
+    private final OrganizerDatailsMapper organizerDatailsMapper;
 
 
     @Autowired
