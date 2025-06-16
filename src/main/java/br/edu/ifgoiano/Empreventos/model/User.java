@@ -63,9 +63,9 @@ public class User implements Serializable {
     @JsonIgnoreProperties("user")
     private ListenerDetails listenerDetails;
 
-    //@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-   // @JsonIgnoreProperties("user")
-    //private OrganizerDetails organizerDetails;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("user")
+    private OrganizerDetails organizerDetails;
 
     // Métodos utilitários
     public void addRole(Role role) {
@@ -93,12 +93,12 @@ public class User implements Serializable {
         }
     }
 
-//    public void setOrganizerDetails(OrganizerDetails details) {
-//        this.organizerDetails = details;
-//        if (details != null) {
-//            details.setUser(this);
-//        }
-//    }
+    public void setOrganizerDetails(OrganizerDetails details) {
+        this.organizerDetails = details;
+        if (details != null) {
+            details.setUser(this);
+        }
+    }
 
     public User() {}
 
