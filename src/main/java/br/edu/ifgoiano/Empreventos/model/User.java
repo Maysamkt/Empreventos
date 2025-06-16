@@ -230,6 +230,12 @@ public class User implements Serializable {
         return listenerDetails;
     }
 
+    public OrganizerDetails getOrganizerDetails() {
+        return organizerDetails;
+    }
+
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

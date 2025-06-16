@@ -9,6 +9,7 @@ public class OrganizerDetailsResponseDTO implements Serializable {
 
     private Long user_id;
     private String companyName;
+    private String brand;
     private String industryOfBusiness;
     private String website;
 //    private List<Invoice> invoice;
@@ -22,6 +23,7 @@ public class OrganizerDetailsResponseDTO implements Serializable {
     public OrganizerDetailsResponseDTO(Long user_id, String companyName, String brand, String industryOfBusiness, String website, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
         this.user_id = user_id;
         this.companyName = companyName;
+        this.brand = brand;
         this.industryOfBusiness = industryOfBusiness;
         this.website = website;
     }
@@ -56,5 +58,12 @@ public class OrganizerDetailsResponseDTO implements Serializable {
 
     public void setWebsite(String website) {
         this.website = website;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 }

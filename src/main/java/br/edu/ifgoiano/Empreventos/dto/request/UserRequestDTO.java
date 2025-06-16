@@ -45,7 +45,7 @@ public class UserRequestDTO implements Serializable {
 
     private SpeakerDetailsRequestDTO speakerDetails;
     private ListenerDetailsRequestDTO listenerDetails;
-   // private OrganizerRequestDTO organizerDetails;
+    private OrganizerDetailsRequestDTO organizerDetails;
 
     public UserRequestDTO() {}
 
@@ -137,13 +137,13 @@ public class UserRequestDTO implements Serializable {
         this.listenerDetails = listenerDetails;
     }
 
-//    public OrganizerRequestDTO getOrganizerDetails() {
-//        return organizerDetails;
-//    }
-//
-//    public void setOrganizerDetails(OrganizerRequestDTO organizerDetails) {
-//        this.organizerDetails = organizerDetails;
-//    }
+    public OrganizerDetailsRequestDTO getOrganizerDetails() {
+        return organizerDetails;
+    }
+
+   public void setOrganizerDetails(OrganizerDetailsRequestDTO organizerDetails) {
+       this.organizerDetails = organizerDetails;
+    }
 
 
 
