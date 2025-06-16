@@ -32,13 +32,13 @@ public class ComplementaryMaterialService {
     }
 
 
-    public List<ComplementaryMaterialDTO> findByAtividadeId(Integer ActivityId) {
+    public List<ComplementaryMaterialDTO> findByAtividadeId(Long ActivityId) {
         var materiais = complementaryMaterialRepository.findByActivityId(ActivityId);
         return DataMapper.parseListObjects(materiais, ComplementaryMaterialDTO.class);
     }
 
 
-    public void delete(Integer materialId) {
+    public void delete(Long materialId) {
         var material = complementaryMaterialRepository.findById(materialId)
                 .orElseThrow(() -> new NoSuchElementException("Material não encontrado com o ID: " + materialId));
         material.setDeletedAt(LocalDateTime.now());
@@ -46,7 +46,7 @@ public class ComplementaryMaterialService {
     }
 
 
-    public ComplementaryMaterialDTO update(Integer materialId, ComplementaryMaterialDTO materialDTO) {
+    public ComplementaryMaterialDTO update(Long materialId, ComplementaryMaterialDTO materialDTO) {
         var material = complementaryMaterialRepository.findById(materialId)
                 .orElseThrow(() -> new NoSuchElementException("Material não encontrado com o ID: " + materialId));
         material.setTitle(materialDTO.getTitle());

@@ -8,6 +8,10 @@ import br.edu.ifgoiano.Empreventos.repository.ActivityRepository;
 import br.edu.ifgoiano.Empreventos.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import br.edu.ifgoiano.Empreventos.controller.ActivityController;
+import br.edu.ifgoiano.Empreventos.controller.ComplementaryMaterialController;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,26 +38,48 @@ public class ActivityService {
         return DataMapper.parseObject(savedActivity, ActivityDTO.class);
     }
 
-    public ActivityResponseDTO findById(Integer activityId) {
+
+    public ActivityResponseDTO findById(Long activityId) {
         var activity = activityRepository.findById(activityId)
                 .orElseThrow(() -> new NoSuchElementException("Activity não encontrada com o ID: " + activityId));
-        return DataMapper.parseObject(activity, ActivityResponseDTO.class);
+
+        var activityDTO = DataMapper.parseObject(activity, ActivityResponseDTO.class);
+
+        // Adiciona link para o próprio recurso
+        activityDTO.add(linkTo(methodOn(ActivityController.class).findById(activityId)).withSelfRel());
+
+        // Adiciona link para os materiais complementares
+        activityDTO.add(linkTo(methodOn(ComplementaryMaterialController.class)
+                .findMateriaisPorAtividade(activityId))
+                .withRel("materials"));
+        return activityDTO;
     }
 
-    public List<ActivityResponseDTO> findByEventoId(Integer eventId) {
+
+    public List<ActivityResponseDTO> findByEventoId(Long eventId) {
         var activities = activityRepository.findByEventId(eventId);
-        return DataMapper.parseListObjects(activities, ActivityResponseDTO.class);
+        var activityDTOs = DataMapper.parseListObjects(activities, ActivityResponseDTO.class);
+
+        // Adiciona os links para cada atividade na lista
+        for (ActivityResponseDTO dto : activityDTOs) {
+            dto.add(linkTo(methodOn(ActivityController.class).findById(dto.getId())).withSelfRel());
+            dto.add(linkTo(methodOn(ComplementaryMaterialController.class)
+                    .findMateriaisPorAtividade(dto.getId()))
+                    .withRel("materials"));
+        }
+        return activityDTOs;
+
     }
 
 
-    public void delete(Integer activityId) {
+    public void delete(Long activityId) {
         var activity = activityRepository.findById(activityId)
                 .orElseThrow(() -> new NoSuchElementException("Atividade com ID " + activityId + " não encontrada."));
         activity.setDeletedAt(LocalDateTime.now());
         activityRepository.save(activity);
     }
 
-    public ActivityDTO update(Integer activityId, ActivityDTO activityDTO) {
+    public ActivityDTO update(Long activityId, ActivityDTO activityDTO) {
         var activity = activityRepository.findById(activityId)
                 .orElseThrow(() -> new NoSuchElementException("Atividade com ID " + activityId + " não encontrada."));
         activity.setTitle(activityDTO.getTitle());

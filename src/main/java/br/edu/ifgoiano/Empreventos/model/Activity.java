@@ -17,7 +17,7 @@ public class Activity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(name = "title", nullable = false, length = 100)
     private String title;
@@ -35,7 +35,7 @@ public class Activity implements Serializable {
     private String location;
 
     @Column(name = "hours_certified")
-    private Integer hoursCertified = 0;
+    private Long hoursCertified = 0L;
 
     @Column(name = "is_published")
     private boolean isPublished = false;
@@ -59,11 +59,11 @@ public class Activity implements Serializable {
     @OneToMany(mappedBy = "activity", cascade = CascadeType.ALL)
     private List<ComplementaryMaterial> complementaryMaterials;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -107,11 +107,11 @@ public class Activity implements Serializable {
         this.location = location;
     }
 
-    public Integer getHoursCertified() {
+    public Long getHoursCertified() {
         return hoursCertified;
     }
 
-    public void setHoursCertified(Integer hoursCertified) {
+    public void setHoursCertified(Long hoursCertified) {
         this.hoursCertified = hoursCertified;
     }
 

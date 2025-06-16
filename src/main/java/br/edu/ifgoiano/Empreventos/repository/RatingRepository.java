@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface RatingRepository extends JpaRepository<Rating, Integer> {
-
-     List<Rating> findBySubscriptionId(Integer subscriptionId);
+public interface RatingRepository extends JpaRepository<Rating, Long> {
+     List<Rating> findBySubscriptionId(Long subscriptionId);
 }
