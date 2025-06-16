@@ -1,24 +1,19 @@
 package br.edu.ifgoiano.Empreventos.model;
 
-import br.edu.ifgoiano.Empreventos.util.InvoiceStatus;
-import br.edu.ifgoiano.Empreventos.util.PaymentMethod;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import java.io.Serial;
+import com.fasterxml.jackson.annotation.JsonValue;
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
 @Table(name = "invoice")
 public class Invoice implements Serializable {
 
-    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -30,65 +25,140 @@ public class Invoice implements Serializable {
     private UserPlan userPlan;
 
     @Column(name = "issue_date", nullable = false)
-    private LocalDateTime issue_date;
+    private LocalDate issueDate;
 
     @Column(name = "due_date", nullable = false)
-    private LocalDateTime due_date;
+    private LocalDate dueDate;
 
-    @Column(name = "amount", nullable = false, precision = 10, scale = 2)
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
-    private InvoiceStatus status;
+    @Column(nullable = false, columnDefinition = "ENUM('PENDING', 'PAID', 'OVERDUE', 'CANCELED')")
+    private InvoiceStatus status = InvoiceStatus.PENDENTE;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "payment_method")
-    private PaymentMethod payment_method;
+    @Column(name = "payment_method", columnDefinition = "ENUM('CREDIT_CARD', 'PIX', 'BANK_SLIP', 'TRANSFER')")
+    private PaymentMethod paymentMethod;
 
     @Column(name = "payment_date")
-    private LocalDateTime payment_date;
+    private LocalDate paymentDate;
 
-    @Column(name = "gateway_id")
-    private String gateway_id;
+    @Column(name = "gateway_id", length = 255)
+    private String gatewayId;
 
-    @Column(name = "billing_cycle")
-    private String billing_cycle;
+    @Column(name = "billing_cycle", nullable = false, length = 20)
+    private String billingCycle;
 
-    @Column(name = "discount", precision = 10, scale = 2)
-    private BigDecimal discount = BigDecimal.valueOf(0.0);
+    @Column(precision = 10, scale = 2)
+    private BigDecimal discount = BigDecimal.ZERO;
 
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime created_at;
+    @Column(name = "created_at", updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private java.util.Date created_at;
 
-    @UpdateTimestamp
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updated_at;
+    @Column(name = "updated_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private java.util.Date updated_at;
 
     @Column(name = "deleted_at")
-    private LocalDateTime deleted_at;
+    @Temporal(TemporalType.TIMESTAMP)
+    private java.util.Date deleted_at;
 
     @PrePersist
     protected void onCreate() {
-        this.created_at = LocalDateTime.now();
-        this.updated_at = LocalDateTime.now();
+        created_at = new java.util.Date();
+        updated_at = new java.util.Date();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        this.updated_at = LocalDateTime.now();
+        updated_at = new java.util.Date();
+    }
+
+    // Enums para status e método de pagamento
+    public enum InvoiceStatus {
+        PENDENTE("PENDING"),
+        PAGO("PAID"),
+        ATRASADO("OVERDUE"),
+        CANCELADO("CANCELED");
+
+        private final String valorBanco;
+
+        InvoiceStatus(String valorBanco) {
+            this.valorBanco = valorBanco;
+        }
+
+        public String getValorBanco() {
+            return valorBanco;
+        }
+
+        @JsonValue
+        public String getDescricao() {
+            return this.name(); // Retorna o nome do enum em português
+        }
+
+        public static InvoiceStatus fromValorBanco(String valorBanco) {
+            for (InvoiceStatus status : values()) {
+                if (status.valorBanco.equalsIgnoreCase(valorBanco)) {
+                    return status;
+                }
+            }
+            throw new IllegalArgumentException("Status inválido: " + valorBanco);
+        }
+    }
+
+    public enum PaymentMethod {
+        CARTAO_CREDITO("CREDIT_CARD"),
+        PIX("PIX"),
+        BOLETO("BANK_SLIP"),
+        TRANSFERENCIA("TRANSFER");
+
+        private final String valorBanco;
+
+        PaymentMethod(String valorBanco) {
+            this.valorBanco = valorBanco;
+        }
+
+        public String getValorBanco() {
+            return valorBanco;
+        }
+
+        @JsonValue
+        public String getDescricao() {
+            return this.name(); // Retorna o nome do enum em português
+        }
+
+        public static PaymentMethod fromValorBanco(String valorBanco) {
+            for (PaymentMethod metodo : values()) {
+                if (metodo.valorBanco.equalsIgnoreCase(valorBanco)) {
+                    return metodo;
+                }
+            }
+            throw new IllegalArgumentException("Método de pagamento inválido: " + valorBanco);
+        }
     }
 
     public Invoice () {}
 
-    public Invoice(Long id, UserPlan userPlan, LocalDateTime issue_date, LocalDateTime due_date, BigDecimal amount, InvoiceStatus status) {
+
+
+    public Invoice(Long id, UserPlan userPlan, LocalDate issueDate, LocalDate dueDate, BigDecimal amount, InvoiceStatus status, PaymentMethod paymentMethod, LocalDate paymentDate, String gatewayId, String billingCycle, BigDecimal discount, Date created_at, Date updated_at, Date deleted_at) {
         this.id = id;
         this.userPlan = userPlan;
-        this.issue_date = issue_date;
-        this.due_date = due_date;
+        this.issueDate = issueDate;
+        this.dueDate = dueDate;
         this.amount = amount;
         this.status = status;
+        this.paymentMethod = paymentMethod;
+        this.paymentDate = paymentDate;
+        this.gatewayId = gatewayId;
+        this.billingCycle = billingCycle;
+        this.discount = discount;
+        this.created_at = created_at;
+        this.updated_at = updated_at;
+        this.deleted_at = deleted_at;
+
     }
 
     public Long getId() {
@@ -98,6 +168,9 @@ public class Invoice implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
+
+
     public UserPlan getUserPlan() {
         return userPlan;
     }
@@ -106,20 +179,21 @@ public class Invoice implements Serializable {
         this.userPlan = userPlan;
     }
 
-    public LocalDateTime getIssue_date() {
-        return issue_date;
+    public LocalDate getIssueDate() {
+        return issueDate;
     }
 
-    public void setIssue_date(LocalDateTime issue_date) {
-        this.issue_date = issue_date;
+    public void setIssueDate(LocalDate issueDate) {
+        this.issueDate = issueDate;
+
     }
 
-    public LocalDateTime getDue_date() {
-        return due_date;
+    public LocalDate getDueDate() {
+        return dueDate;
     }
 
-    public void setDue_date(LocalDateTime due_date) {
-        this.due_date = due_date;
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
     }
 
     public BigDecimal getAmount() {
@@ -138,36 +212,36 @@ public class Invoice implements Serializable {
         this.status = status;
     }
 
-    public PaymentMethod getPayment_method() {
-        return payment_method;
+    public PaymentMethod getPaymentMethod() {
+        return paymentMethod;
     }
 
-    public void setPayment_method(PaymentMethod payment_method) {
-        this.payment_method = payment_method;
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
+        this.paymentMethod = paymentMethod;
     }
 
-    public LocalDateTime getPayment_date() {
-        return payment_date;
+    public LocalDate getPaymentDate() {
+        return paymentDate;
     }
 
-    public void setPayment_date(LocalDateTime payment_date) {
-        this.payment_date = payment_date;
+    public void setPaymentDate(LocalDate paymentDate) {
+        this.paymentDate = paymentDate;
     }
 
-    public String getGateway_id() {
-        return gateway_id;
+    public String getGatewayId() {
+        return gatewayId;
     }
 
-    public void setGateway_id(String gateway_id) {
-        this.gateway_id = gateway_id;
+    public void setGatewayId(String gatewayId) {
+        this.gatewayId = gatewayId;
     }
 
-    public String getBilling_cycle() {
-        return billing_cycle;
+    public String getBillingCycle() {
+        return billingCycle;
     }
 
-    public void setBilling_cycle(String billing_cycle) {
-        this.billing_cycle = billing_cycle;
+    public void setBillingCycle(String billingCycle) {
+        this.billingCycle = billingCycle;
     }
 
     public BigDecimal getDiscount() {
@@ -178,27 +252,27 @@ public class Invoice implements Serializable {
         this.discount = discount;
     }
 
-    public LocalDateTime getCreated_at() {
+    public Date getCreated_at() {
         return created_at;
     }
 
-    public void setCreated_at(LocalDateTime created_at) {
+    public void setCreated_at(Date created_at) {
         this.created_at = created_at;
     }
 
-    public LocalDateTime getUpdated_at() {
+    public Date getUpdated_at() {
         return updated_at;
     }
 
-    public void setUpdated_at(LocalDateTime updated_at) {
+    public void setUpdated_at(Date updated_at) {
         this.updated_at = updated_at;
     }
 
-    public LocalDateTime getDeleted_at() {
+    public Date getDeleted_at() {
         return deleted_at;
     }
 
-    public void setDeleted_at(LocalDateTime deleted_at) {
+    public void setDeleted_at(Date deleted_at) {
         this.deleted_at = deleted_at;
     }
 
@@ -219,12 +293,20 @@ public class Invoice implements Serializable {
     public String toString() {
         return "Invoice{" +
                 "id=" + id +
-                ", userPlan=" + (userPlan != null ? userPlan.getId() : "null") + // Mostra o ID do UserPlan
-                ", issue_date=" + issue_date +
-                ", due_date=" + due_date +
+
+
+                ", userPlan=" + userPlan +
+                ", issueDate=" + issueDate +
+                ", dueDate=" + dueDate +
                 ", amount=" + amount +
                 ", status=" + status +
-                ", payment_method=" + payment_method +
+                ", paymentMethod=" + paymentMethod +
+                ", paymentDate=" + paymentDate +
+                ", gatewayId='" + gatewayId + '\'' +
+                ", billingCycle='" + billingCycle + '\'' +
+                ", discount=" + discount +
                 '}';
     }
+
+
 }
