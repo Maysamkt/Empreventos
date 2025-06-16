@@ -3,6 +3,7 @@ package br.edu.ifgoiano.Empreventos.mapper;
 import br.edu.ifgoiano.Empreventos.dto.request.UserRequestDTO;
 import br.edu.ifgoiano.Empreventos.dto.response.UserResponseDTO;
 import br.edu.ifgoiano.Empreventos.model.ListenerDetails;
+import br.edu.ifgoiano.Empreventos.model.OrganizerDetails;
 import br.edu.ifgoiano.Empreventos.model.SpeakerDetails;
 import br.edu.ifgoiano.Empreventos.model.User;
 
@@ -19,13 +20,15 @@ public class UserMapper {
 
     private final SpeakerDetailsMapper speakerDetailsMapper;
     private final ListenerDetailsMapper listenerDetailsMapper;
-    private final OrganizerDatailsMapper organizerDatailsMapper;
+    private final OrganizerDetailsMapper organizerDetailsMapper;
+
 
 
     @Autowired
-    public UserMapper(SpeakerDetailsMapper speakerDetailsMapper, ListenerDetailsMapper listenerDetailsMapper) {
+    public UserMapper(SpeakerDetailsMapper speakerDetailsMapper, ListenerDetailsMapper listenerDetailsMapper, OrganizerDetailsMapper organizerDetailsMapper) {
         this.speakerDetailsMapper = speakerDetailsMapper;
         this.listenerDetailsMapper = listenerDetailsMapper;
+        this.organizerDetailsMapper = organizerDetailsMapper;
     }
 
     public UserResponseDTO toResponseDTO(User user) {
@@ -73,11 +76,16 @@ public class UserMapper {
 
         if (dto.getSpeakerDetails() != null) {
             SpeakerDetails speakerDetails = speakerDetailsMapper.toEntity(dto.getSpeakerDetails());
-            user.setSpeakerDetails(speakerDetails); // IMPORTANT: This also sets user on speakerDetails
+            user.setSpeakerDetails(speakerDetails);
         }
         if (dto.getListenerDetails() != null) {
             ListenerDetails listenerDetails = listenerDetailsMapper.toEntity(dto.getListenerDetails());
-            user.setListenerDetails(listenerDetails); // IMPORTANT: This also sets user on listenerDetails
+            user.setListenerDetails(listenerDetails);
+        }
+
+        if (dto.getOrganizerDetails() != null){
+            OrganizerDetails organizerDetails = organizerDetailsMapper.toEntity(dto.getOrganizerDetails());
+            user.setOrganizerDetails(organizerDetails);
         }
 
         return user;
@@ -121,6 +129,19 @@ public class UserMapper {
         } else {
             if (entity.getListenerDetails() != null) {
                 entity.setListenerDetails(null);
+            }
+        }
+
+        if (dto.getOrganizerDetails() != null) {
+            if (entity.getOrganizerDetails() == null) {
+                OrganizerDetails newOrganizerDetails = organizerDetailsMapper.toEntity(dto.getOrganizerDetails());
+                entity.setOrganizerDetails(newOrganizerDetails);
+            } else {
+                organizerDetailsMapper.updateEntityFromDTO(dto.getOrganizerDetails(), entity.getOrganizerDetails());
+            }
+        } else {
+            if (entity.getOrganizerDetails() != null) {
+                entity.setOrganizerDetails(null);
             }
         }
     }
