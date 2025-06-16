@@ -58,10 +58,9 @@ public class OrganizerDetailsService {
                 .orElseThrow(() -> new NoSuchElementException("Atividade com ID " + userId + " não encontrada."));
         organizerDetails.setUser_id(organizerDetails.getUser_id());
         organizerDetails.setBrand(organizerDetails.getBrand());
-        organizerDetails.setEvents(organizerDetails.getEvents());
-        organizerDetails.setCompanyName(organizerDetails.getCompanyName());
+        organizerDetails.setCompany_name(organizerDetails.getCompany_name());
         organizerDetails.setWebsite(organizerDetails.getWebsite());
-        organizerDetails.setIndustryOfBusiness(organizerDetails.getIndustryOfBusiness());
+        organizerDetails.setIndustry_of_business(organizerDetails.getIndustry_of_business());
 
 
         var savedOrganizerDetails = organizerDetailsRepository.save(organizerDetails);

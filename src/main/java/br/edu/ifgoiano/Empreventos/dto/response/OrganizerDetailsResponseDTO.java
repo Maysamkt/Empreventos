@@ -1,8 +1,5 @@
 package br.edu.ifgoiano.Empreventos.dto.response;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
 

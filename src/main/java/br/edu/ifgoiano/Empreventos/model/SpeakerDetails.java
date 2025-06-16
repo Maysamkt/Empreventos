@@ -27,7 +27,7 @@ public class SpeakerDetails implements Serializable {
     @Column(nullable = false, length = 100)
     private String specialization;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     private String linkedin;
 
     @Column(name = "other_social_networks", length = 255)
