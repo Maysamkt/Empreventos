@@ -141,6 +141,8 @@ public class Invoice implements Serializable {
 
     public Invoice () {}
 
+
+
     public Invoice(Long id, UserPlan userPlan, LocalDate issueDate, LocalDate dueDate, BigDecimal amount, InvoiceStatus status, PaymentMethod paymentMethod, LocalDate paymentDate, String gatewayId, String billingCycle, BigDecimal discount, Date created_at, Date updated_at, Date deleted_at) {
         this.id = id;
         this.userPlan = userPlan;
@@ -156,6 +158,7 @@ public class Invoice implements Serializable {
         this.created_at = created_at;
         this.updated_at = updated_at;
         this.deleted_at = deleted_at;
+
     }
 
     public Long getId() {
@@ -165,6 +168,8 @@ public class Invoice implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
+
 
     public UserPlan getUserPlan() {
         return userPlan;
@@ -180,6 +185,7 @@ public class Invoice implements Serializable {
 
     public void setIssueDate(LocalDate issueDate) {
         this.issueDate = issueDate;
+
     }
 
     public LocalDate getDueDate() {
@@ -287,6 +293,8 @@ public class Invoice implements Serializable {
     public String toString() {
         return "Invoice{" +
                 "id=" + id +
+
+
                 ", userPlan=" + userPlan +
                 ", issueDate=" + issueDate +
                 ", dueDate=" + dueDate +
@@ -299,5 +307,6 @@ public class Invoice implements Serializable {
                 ", discount=" + discount +
                 '}';
     }
+
 
 }

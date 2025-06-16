@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-@ControllerAdvice
+//@ControllerAdvice
 public class UserExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)

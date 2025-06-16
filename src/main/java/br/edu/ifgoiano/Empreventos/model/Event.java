@@ -62,10 +62,9 @@ public class Event implements Serializable {
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<Activity> activities;
 
-
-     @ManyToOne(fetch = FetchType.LAZY)
-     @JoinColumn(name = "organizer_id")
-     private User organizer;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "organizer_id")
+    private User organizer;
 
     public Long getId() {
         return id;

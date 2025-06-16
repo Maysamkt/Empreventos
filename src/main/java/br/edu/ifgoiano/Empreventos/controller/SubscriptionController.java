@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,6 +18,7 @@ public class SubscriptionController {
     private SubscriptionService subscriptionService;
 
     @PostMapping
+    @PreAuthorize("hasRole('LISTENER')")
     public ResponseEntity<SubscriptionResponseDTO> create(@Valid @RequestBody SubscriptionDTO subscriptionDTO) {
         var createdSubscription = subscriptionService.create(subscriptionDTO);
         return new ResponseEntity<>(createdSubscription, HttpStatus.CREATED);

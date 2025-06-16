@@ -4,8 +4,10 @@ import br.edu.ifgoiano.Empreventos.dto.ActivityDTO;
 import br.edu.ifgoiano.Empreventos.dto.ActivityResponseDTO;
 import br.edu.ifgoiano.Empreventos.mapper.DataMapper;
 import br.edu.ifgoiano.Empreventos.model.Activity;
+import br.edu.ifgoiano.Empreventos.model.User;
 import br.edu.ifgoiano.Empreventos.repository.ActivityRepository;
 import br.edu.ifgoiano.Empreventos.repository.EventRepository;
+import br.edu.ifgoiano.Empreventos.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import br.edu.ifgoiano.Empreventos.controller.ActivityController;
@@ -26,6 +28,8 @@ public class ActivityService {
     @Autowired
     private EventRepository eventRepository;
 
+    @Autowired
+    private UserRepository userRepository;
 
     public ActivityDTO create (ActivityDTO activityDTO) {
         var event = eventRepository.findById(activityDTO.getEventId())
@@ -33,7 +37,11 @@ public class ActivityService {
 
         var activity = DataMapper.parseObject(activityDTO, Activity.class);
         activity.setEvent(event);
-
+        if (activityDTO.getSpeakerId() != null) {
+            User speaker = userRepository.findById(activityDTO.getSpeakerId())
+                    .orElseThrow(() -> new NoSuchElementException("Palestrante com ID " + activityDTO.getSpeakerId() + " não encontrado."));
+            activity.setSpeaker(speaker);
+        }
         var savedActivity = activityRepository.save(activity);
         return DataMapper.parseObject(savedActivity, ActivityDTO.class);
     }
@@ -44,14 +52,12 @@ public class ActivityService {
                 .orElseThrow(() -> new NoSuchElementException("Activity não encontrada com o ID: " + activityId));
 
         var activityDTO = DataMapper.parseObject(activity, ActivityResponseDTO.class);
-
-        // Adiciona link para o próprio recurso
         activityDTO.add(linkTo(methodOn(ActivityController.class).findById(activityId)).withSelfRel());
+        activityDTO.add(linkTo(methodOn(ComplementaryMaterialController.class).findMateriaisPorAtividade(activityId)).withRel("materials"));
 
-        // Adiciona link para os materiais complementares
-        activityDTO.add(linkTo(methodOn(ComplementaryMaterialController.class)
-                .findMateriaisPorAtividade(activityId))
-                .withRel("materials"));
+        if (activity.getSpeaker() != null) {
+            activityDTO.setSpeakerName(activity.getSpeaker().getName());
+        }
         return activityDTO;
     }
 
@@ -60,7 +66,6 @@ public class ActivityService {
         var activities = activityRepository.findByEventId(eventId);
         var activityDTOs = DataMapper.parseListObjects(activities, ActivityResponseDTO.class);
 
-        // Adiciona os links para cada atividade na lista
         for (ActivityResponseDTO dto : activityDTOs) {
             dto.add(linkTo(methodOn(ActivityController.class).findById(dto.getId())).withSelfRel());
             dto.add(linkTo(methodOn(ComplementaryMaterialController.class)

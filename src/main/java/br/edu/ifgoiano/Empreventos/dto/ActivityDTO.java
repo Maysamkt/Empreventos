@@ -10,6 +10,7 @@ public class ActivityDTO {
     private Long id;
 
     private Long eventId;
+    private Long speakerId;
 
     @NotBlank(message = "O título da atividade é obrigatório.")
     private String title;
@@ -27,6 +28,13 @@ public class ActivityDTO {
     private Long hoursCertified;
     private boolean isPublished;
 
+    public Long getSpeakerId() {
+        return speakerId;
+    }
+
+    public void setSpeakerId(Long speakerId) {
+        this.speakerId = speakerId;
+    }
 
     public Long getEventId() {
         return eventId;

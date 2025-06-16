@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class RatingService {
@@ -36,10 +37,29 @@ public class RatingService {
         return DataMapper.parseListObjects(ratings, RatingDTO.class);
     }
 
+    public Optional<Rating> findRatingByUserAndEvent(Long userId, Long eventId) {
+        return ratingRepository.findByUserAndEvent(userId, eventId);
+    }
+
+    public List<RatingDTO> findByEventId(Long eventId) {
+        var ratings = ratingRepository.findByEventId(eventId);
+        return DataMapper.parseListObjects(ratings, RatingDTO.class);
+    }
+
     public void delete(Long ratingId) {
         var rating = ratingRepository.findById(ratingId)
                 .orElseThrow(() -> new NoSuchElementException("Avaliação com ID " + ratingId + " não encontrada."));
         rating.setDeletedAt(LocalDateTime.now());
         ratingRepository.save(rating);
+    }
+
+    public RatingDTO update(Long ratingId, RatingDTO ratingDTO) {
+        var rating = ratingRepository.findById(ratingId)
+                .orElseThrow(() -> new NoSuchElementException("Avaliação com ID " + ratingId + " não encontrada."));
+        rating.setScore(ratingDTO.getScore());
+        rating.setComment(ratingDTO.getComment());
+
+        var updatedRating = ratingRepository.save(rating);
+        return DataMapper.parseObject(updatedRating, RatingDTO.class);
     }
 }

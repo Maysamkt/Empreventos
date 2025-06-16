@@ -42,7 +42,6 @@ public class UserMapper {
         dto.setEmail(user.getEmail());
         dto.setPhoneNumber(user.getPhone_number());
         dto.setActive(user.getActive());
-        dto.setAvatarUrl(user.getAvatar_url());
         dto.setBio(user.getBio());
 
         // Mapeia apenas os nomes das roles

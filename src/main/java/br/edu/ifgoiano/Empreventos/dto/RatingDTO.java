@@ -9,9 +9,6 @@ public class RatingDTO {
 
     private Long id;
 
-    @NotNull(message = "O ID da inscrição é obrigatório.")
-    private Long subscriptionId;
-
     @NotNull(message = "A nota é obrigatória.")
     @Min(value = 1, message = "A nota mínima é 1.")
     @Max(value = 5, message = "A nota máxima é 5.")
@@ -46,11 +43,4 @@ public class RatingDTO {
         this.comment = comment;
     }
 
-    public Long getSubscriptionId() {
-        return subscriptionId;
-    }
-
-    public void setSubscriptionId(Long subscriptionId) {
-        this.subscriptionId = subscriptionId;
-    }
 }
