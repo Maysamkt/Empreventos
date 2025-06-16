@@ -19,12 +19,16 @@ public interface UserRepository  extends JpaRepository<User, Long> {
     @EntityGraph(attributePaths = {"userRoles", "userRoles.role"})
 
     boolean existsByEmail(String email);
-   // boolean existsByCpfCnpj(String cpf_cnpj);
+
     Optional<User> findByEmail(String email);
 
     @Query("SELECT u FROM User u WHERE u.deleted_at IS NULL")
     List<User> findAllActiveUsers();
     @Query("SELECT r FROM Role r WHERE r.name IN :names")
     Set<Role> findAllByNameIn(@Param("names") Set<Role.RoleName> names);
+    @Query("SELECT u FROM User u WHERE u.id = :id AND u.active = true")
+    Optional<User> findActiveById(@Param("id") Long id);
+
+    Optional<User> findByEmailAndActiveTrue(String email);
 
 }
