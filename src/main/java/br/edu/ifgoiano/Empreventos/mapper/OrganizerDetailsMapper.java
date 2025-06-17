@@ -3,10 +3,17 @@ package br.edu.ifgoiano.Empreventos.mapper;
 import br.edu.ifgoiano.Empreventos.dto.request.OrganizerDetailsRequestDTO;
 import br.edu.ifgoiano.Empreventos.dto.response.OrganizerDetailsResponseDTO;
 import br.edu.ifgoiano.Empreventos.model.OrganizerDetails;
+import br.edu.ifgoiano.Empreventos.repository.OrganizerDetailsRepository;
 import org.springframework.stereotype.Component;
 
 @Component
 public class OrganizerDetailsMapper {
+
+    private final OrganizerDetailsRepository organizerDetailsRepository;
+
+    public OrganizerDetailsMapper(OrganizerDetailsRepository organizerDetailsRepository) {
+        this.organizerDetailsRepository = organizerDetailsRepository;
+    }
 
     public OrganizerDetailsResponseDTO toResponseDTO(OrganizerDetails organizerDetails) {
         if (organizerDetails == null){
@@ -35,7 +42,6 @@ public class OrganizerDetailsMapper {
         }
 
         OrganizerDetails organizerDetails = new OrganizerDetails();
-        organizerDetails.setUser_id(dto.getUser_id());
         organizerDetails.setCompany_name(dto.getCompanyName());
         organizerDetails.setBrand(dto.getBrand());
         organizerDetails.setWebsite(dto.getWebsite());

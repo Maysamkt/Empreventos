@@ -3,10 +3,17 @@ package br.edu.ifgoiano.Empreventos.mapper;
 import br.edu.ifgoiano.Empreventos.dto.request.ListenerDetailsRequestDTO;
 import br.edu.ifgoiano.Empreventos.dto.response.ListenerDetailsResponseDTO;
 import br.edu.ifgoiano.Empreventos.model.ListenerDetails;
+import br.edu.ifgoiano.Empreventos.repository.ListenerDetailsRepository;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ListenerDetailsMapper {
+
+    private final ListenerDetailsRepository listenerDetailsRepository;
+
+    public ListenerDetailsMapper(ListenerDetailsRepository listenerDetailsRepository) {
+        this.listenerDetailsRepository = listenerDetailsRepository;
+    }
 
     public ListenerDetailsResponseDTO toResponseDTO(ListenerDetails listenerDetails) {
         if (listenerDetails == null) {

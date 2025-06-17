@@ -4,6 +4,7 @@ import br.edu.ifgoiano.Empreventos.dto.request.ListenerDetailsRequestDTO;
 import br.edu.ifgoiano.Empreventos.dto.response.ListenerDetailsResponseDTO;
 import br.edu.ifgoiano.Empreventos.mapper.ListenerDetailsMapper;
 import br.edu.ifgoiano.Empreventos.model.ListenerDetails;
+import br.edu.ifgoiano.Empreventos.model.SpeakerDetails;
 import br.edu.ifgoiano.Empreventos.model.User;
 import br.edu.ifgoiano.Empreventos.repository.ListenerDetailsRepository;
 import br.edu.ifgoiano.Empreventos.repository.UserRepository;
@@ -96,6 +97,13 @@ public class ListenerDetailsService {
 
         listenerDetailsRepository.delete(listenerDetails);
 
+    }
+
+    public Long getUserIdByListenerDetailsId(Long listenerDetailsId) {
+        return listenerDetailsRepository.findById(listenerDetailsId)
+                .map(ListenerDetails::getUser)
+                .map(User::getId)
+                .orElse(null);
     }
 }
 

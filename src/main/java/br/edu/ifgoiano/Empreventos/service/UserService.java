@@ -9,7 +9,9 @@ import br.edu.ifgoiano.Empreventos.mapper.UserMapper;
 import br.edu.ifgoiano.Empreventos.model.UserRole;
 import br.edu.ifgoiano.Empreventos.repository.RoleRepository;
 import br.edu.ifgoiano.Empreventos.repository.UserRepository;
+import br.edu.ifgoiano.Empreventos.security.jwt.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -154,6 +156,20 @@ public class UserService {
                 desired.setUser(user);
             }
         });
+    }
+
+    @Transactional(readOnly = true)
+    public UserResponseDTO findCurrentUserDetails(UserDetails userDetails) {
+        if (userDetails instanceof UserDetailsImpl) {
+            UserDetailsImpl userDetailsImpl = (UserDetailsImpl) userDetails;
+
+            User user = userRepository.findActiveById(userDetailsImpl.getId())
+                    .orElseThrow(() -> new NoSuchElementException("Usuário não encontrado: " + userDetailsImpl.getId()));
+
+            // Mapeia o User completo para o DTO de resposta
+            return userMapper.toResponseDTO(user);
+        }
+        throw new IllegalArgumentException("Detalhes do usuário não é do tipo esperado. Certifique-se de que o usuário está autenticado corretamente.");
     }
 
 }

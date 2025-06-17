@@ -41,13 +41,14 @@ public class EventController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ORGANIZER')")
+    @PreAuthorize("hasRole('ADMIN') or (hasRole('ORGANIZER') and @organizerDetailsService.getUserIdByOrganizerDetailsId(#id) == authentication.principal.id)")
     public ResponseEntity<?> delete(@PathVariable Long id) throws AccessDeniedException {
         eventService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public List<EventResponseDTO> findAll() {
         return eventService.findAll();
     }

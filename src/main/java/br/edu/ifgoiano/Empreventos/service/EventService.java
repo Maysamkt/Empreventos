@@ -14,10 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.nio.file.AccessDeniedException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -40,7 +43,7 @@ public class EventService {
 
     public EventResponseDTO findById(Long id) {
         logger.info("Encontrando um Evento pelo ID!");
-        var eventEntity = eventRepository.findById(id)
+        var eventEntity = eventRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new NoSuchElementException("Evento com ID " + id + " não encontrado."));
         EventResponseDTO eventDTO = DataMapper.parseObject(eventEntity, EventResponseDTO.class);
 
@@ -66,7 +69,7 @@ public class EventService {
 
     public List<EventResponseDTO> findAll() {
         logger.info("Encontrando todos os eventos!");
-        List<Event> events = eventRepository.findAll();
+        List<Event> events = eventRepository.findAllByDeletedAtIsNull();
         List<EventResponseDTO> eventDTOs = DataMapper.parseListObjects(events, EventResponseDTO.class);
 
         for (EventResponseDTO event : eventDTOs) {
@@ -76,33 +79,43 @@ public class EventService {
         return eventDTOs;
     }
 
-
+    @Transactional
     public EventDTO create(EventDTO eventDTO) {
         logger.info("Criando um Evento!");
 
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User organizer = userRepository.findById(userDetails.getId())
-                .orElseThrow(() -> new NoSuchElementException("Organizador não encontrado."));
+                .orElseThrow(() -> new NoSuchElementException("Organizador com ID " + userDetails.getId() + " não encontrado."));
+
+
+        checkDuplicateEvent(eventDTO.getTitle(), eventDTO.getStartDate(), organizer, null);
+
 
         var eventEntity = DataMapper.parseObject(eventDTO, Event.class);
         eventEntity.setStatus(EventStatus.DRAFT);
         eventEntity.setOrganizer(organizer);
+        eventEntity.setCreatedAt(LocalDateTime.now());
+        eventEntity.setUpdatedAt(LocalDateTime.now());
         var savedEvent = eventRepository.save(eventEntity);
+        logger.info("Evento criado com sucesso: " + savedEvent.getId());
         return DataMapper.parseObject(savedEvent, EventDTO.class);
     }
 
 
     public EventDTO update(Long id, EventDTO eventDTO) throws AccessDeniedException {
-        logger.info("Atualizando um Evento!");
+        logger.info("Atualizando um Evento com ID: " + id);
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long currentUserId = userDetails.getId();
 
-        var event = eventRepository.findById(id)
+        var event = eventRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new NoSuchElementException("Evento com ID " + id + " não encontrado."));
 
         if (!event.getOrganizer().getId().equals(currentUserId)) {
             throw new AccessDeniedException("Acesso negado. Você não é o organizador deste evento.");
         }
+
+        checkDuplicateEvent(eventDTO.getTitle(), eventDTO.getStartDate(), event.getOrganizer(), id);
+
         event.setTitle(eventDTO.getTitle());
         event.setTitle(eventDTO.getTitle());
         event.setDescription(eventDTO.getDescription());
@@ -115,8 +128,11 @@ public class EventService {
         if (eventDTO.getStatus() != null) {
             event.setStatus(EventStatus.valueOf(eventDTO.getStatus().toUpperCase()));
         }
+        event.setUpdatedAt(LocalDateTime.now());
+
         event.setRegistrationValue(eventDTO.getRegistrationValue());
         var eventEntity = eventRepository.save(event);
+        logger.info("Evento atualizado com sucesso: " + eventEntity.getId());
         return DataMapper.parseObject(eventEntity, EventDTO.class);
     }
 
@@ -126,9 +142,12 @@ public class EventService {
         UserDetailsImpl userDetails = (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long currentUserId = userDetails.getId();
 
-        var event = eventRepository.findById(id)
+        var event = eventRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new NoSuchElementException("Evento com ID " + id + " não encontrado."));
+
         event.setDeletedAt(java.time.LocalDateTime.now());
+
+
         eventRepository.save(event);
         if (!event.getOrganizer().getId().equals(currentUserId)) {
             throw new AccessDeniedException("Acesso negado. Você não é o organizador deste evento.");
@@ -146,5 +165,33 @@ public class EventService {
             }
             eventRepository.save(event);
         }
+    }
+
+    // --- Método auxiliar para verificar duplicidade ---
+
+    private void checkDuplicateEvent(String title, LocalDateTime startDate, User organizer, Long excludeEventId) {
+        Optional<Event> existingEvent;
+
+        if (excludeEventId == null) {
+            //Caso de criação: verifica se já existe um evento com esse título, data e organizador (não deletado)
+            existingEvent = eventRepository.findByTitleAndStartDateAndOrganizerAndDeletedAtIsNull(title, startDate, organizer);
+        } else {
+            // Caso de atualização: verifica se já existe um evento com esse título, data e organizador,
+            // que não seja o próprio evento que está sendo atualizado (e não deletado)
+            existingEvent = eventRepository.findByTitleAndStartDateAndOrganizerAndIdNotAndDeletedAtIsNull(title, startDate, organizer, excludeEventId);
+        }
+
+        if (existingEvent.isPresent()) {
+            throw new IllegalArgumentException("Já existe um evento com o mesmo título, data de início e organizador.");
+        }
+    }
+
+    // Método auxiliar para obter o organizador de um evento
+    @Transactional(readOnly = true)
+    public Long getOrganizerIdByEventId(Long eventId) {
+        return eventRepository.findByIdAndDeletedAtIsNull(eventId)
+                .map(Event::getOrganizer)
+                .map(User::getId)
+                .orElseThrow(() -> new NoSuchElementException("Evento ou organizador não encontrado para o ID: " + eventId));
     }
 }

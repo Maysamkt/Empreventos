@@ -98,4 +98,11 @@ public class SpeakerDetailsService {
 
         speakerDetailsRepository.delete(speakerDetails);
     }
+
+    public Long getUserIdBySpeakerDetailsId(Long speakerDetailsId) {
+        return speakerDetailsRepository.findById(speakerDetailsId)
+                .map(SpeakerDetails::getUser)
+                .map(User::getId)
+                .orElse(null);
+    }
 }

@@ -6,12 +6,10 @@ import br.edu.ifgoiano.Empreventos.model.ListenerDetails;
 import br.edu.ifgoiano.Empreventos.model.OrganizerDetails;
 import br.edu.ifgoiano.Empreventos.model.SpeakerDetails;
 import br.edu.ifgoiano.Empreventos.model.User;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
+import java.util.ArrayList;
 import java.util.Date;
-
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -50,7 +48,21 @@ public class UserMapper {
                     .map(ur -> ur.getRole() != null ? ur.getRole().getName().name() : null)
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList()));
+        } else {
+            dto.setRoles(new ArrayList<>());
         }
+
+        // Mapear detalhes da entidade para os DTOs de resposta dos detalhes
+        if (user.getSpeakerDetails() != null) {
+            dto.setSpeakerDetails(speakerDetailsMapper.toResponseDTO(user.getSpeakerDetails()));
+        }
+        if (user.getListenerDetails() != null) {
+            dto.setListenerDetails(listenerDetailsMapper.toResponseDTO(user.getListenerDetails()));
+        }
+        if (user.getOrganizerDetails() != null) {
+            dto.setOrganizerDetails(organizerDetailsMapper.toResponseDTO(user.getOrganizerDetails()));
+        }
+
 
 
 
@@ -95,32 +107,35 @@ public class UserMapper {
             return;
         }
 
-        entity.setName(dto.getName());
-        entity.setPhone_number(dto.getPhone_number());
-        entity.setAvatar_url(dto.getAvatar_url());
-        entity.setBio(dto.getBio());
+        if (dto.getName() != null ) entity.setName(dto.getName());
+        if (dto.getPhone_number() != null) entity.setPhone_number(dto.getPhone_number());
+        if (dto.getCpf_cnpj() != null) entity.setCpf_cnpj(dto.getCpf_cnpj());
+        if (dto.getAvatar_url() != null ) entity.setAvatar_url(dto.getAvatar_url());
+        if (dto.getBio() != null) entity.setBio(dto.getBio());
         entity.setUpdated_at(new Date());
 
         // Handle SpeakerDetails
         if (dto.getSpeakerDetails() != null) {
             if (entity.getSpeakerDetails() == null) {
-                // If entity doesn't have speaker details, create new ones
                 SpeakerDetails newSpeakerDetails = speakerDetailsMapper.toEntity(dto.getSpeakerDetails());
+                newSpeakerDetails.setUser(entity);
+                newSpeakerDetails.setUser_id(entity.getId());
                 entity.setSpeakerDetails(newSpeakerDetails);
             } else {
-                // Otherwise, update existing ones
                 speakerDetailsMapper.updateEntityFromDTO(dto.getSpeakerDetails(), entity.getSpeakerDetails());
             }
         } else {
-            // If DTO has no speaker details but entity does, remove them
+
             if (entity.getSpeakerDetails() != null) {
-                entity.setSpeakerDetails(null); // Due to orphanRemoval=true, this will delete from DB
+                entity.setSpeakerDetails(null);
             }
         }
         // Handle ListenerDetails
         if (dto.getListenerDetails() != null) {
             if (entity.getListenerDetails() == null) {
                 ListenerDetails newListenerDetails = listenerDetailsMapper.toEntity(dto.getListenerDetails());
+                newListenerDetails.setUser(entity);
+                newListenerDetails.setUser_id(entity.getId());
                 entity.setListenerDetails(newListenerDetails);
             } else {
                 listenerDetailsMapper.updateEntityFromDTO(dto.getListenerDetails(), entity.getListenerDetails());
@@ -134,6 +149,8 @@ public class UserMapper {
         if (dto.getOrganizerDetails() != null) {
             if (entity.getOrganizerDetails() == null) {
                 OrganizerDetails newOrganizerDetails = organizerDetailsMapper.toEntity(dto.getOrganizerDetails());
+                newOrganizerDetails.setUser(entity); // Associa o User
+                newOrganizerDetails.setUser_id(entity.getId()); // Define o user_id
                 entity.setOrganizerDetails(newOrganizerDetails);
             } else {
                 organizerDetailsMapper.updateEntityFromDTO(dto.getOrganizerDetails(), entity.getOrganizerDetails());
@@ -144,4 +161,6 @@ public class UserMapper {
             }
         }
     }
+
+
 }

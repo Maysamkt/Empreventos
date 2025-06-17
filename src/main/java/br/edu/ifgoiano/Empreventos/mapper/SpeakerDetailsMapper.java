@@ -4,10 +4,17 @@ package br.edu.ifgoiano.Empreventos.mapper;
 import br.edu.ifgoiano.Empreventos.dto.request.SpeakerDetailsRequestDTO;
 import br.edu.ifgoiano.Empreventos.dto.response.SpeakerDetailsResponseDTO;
 import br.edu.ifgoiano.Empreventos.model.SpeakerDetails;
+import br.edu.ifgoiano.Empreventos.repository.SpeakerDetailsRepository;
 import org.springframework.stereotype.Component;
 
 @Component
 public class SpeakerDetailsMapper {
+
+    private final SpeakerDetailsRepository speakerDetailsRepository;
+
+    public SpeakerDetailsMapper(SpeakerDetailsRepository speakerDetailsRepository) {
+        this.speakerDetailsRepository = speakerDetailsRepository;
+    }
 
     public SpeakerDetailsResponseDTO toResponseDTO(SpeakerDetails speakerDetails){
         if(speakerDetails == null){

@@ -5,6 +5,7 @@ import br.edu.ifgoiano.Empreventos.dto.response.OrganizerDetailsResponseDTO;
 import br.edu.ifgoiano.Empreventos.mapper.DataMapper;
 import br.edu.ifgoiano.Empreventos.mapper.OrganizerDetailsMapper;
 import br.edu.ifgoiano.Empreventos.model.OrganizerDetails;
+import br.edu.ifgoiano.Empreventos.model.User;
 import br.edu.ifgoiano.Empreventos.repository.UserRepository;
 import br.edu.ifgoiano.Empreventos.repository.OrganizerDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +37,10 @@ public class OrganizerDetailsService {
     }
 
 
-    public OrganizerDetailsRequestDTO create (OrganizerDetailsRequestDTO organizerDetailsRequestDTO) {
-        var user = userRepository.findById(organizerDetailsRequestDTO.getUser_id())
-                .orElseThrow(() -> new NoSuchElementException("Empresa organizadora não encontrada com o ID: " + organizerDetailsRequestDTO.getUser_id()));
+    public OrganizerDetailsRequestDTO create (Long userId, OrganizerDetailsRequestDTO organizerDetailsRequestDTO) {
+        logger.info("Criando detalhes de organizer para o usuário ID" + userId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementException("Empresa organizadora não encontrada com o ID: " + userId ));
 
         var organizerDetails = DataMapper.parseObject(organizerDetailsRequestDTO, OrganizerDetails.class);
         organizerDetails.setUser(user);
@@ -85,6 +87,13 @@ public class OrganizerDetailsService {
         return organizerDetailsRepository.findAll().stream()
                 .map(organizerDetailsMapper::toResponseDTO)
                 .collect(Collectors.toList());
+    }
+
+    public Long getUserIdByOrganizerDetailsId(Long organizerDetailsId) {
+        return organizerDetailsRepository.findById(organizerDetailsId)
+                .map(OrganizerDetails::getUser)
+                .map(User::getId)
+                .orElse(null);
     }
 }
 

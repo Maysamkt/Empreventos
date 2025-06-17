@@ -2,9 +2,6 @@ package br.edu.ifgoiano.Empreventos.dto.response;
 
 
 
-import br.edu.ifgoiano.Empreventos.model.ListenerDetails;
-import br.edu.ifgoiano.Empreventos.model.SpeakerDetails;
-
 import java.io.Serializable;
 
 import java.util.List;
@@ -20,6 +17,9 @@ public class UserResponseDTO  implements Serializable {
     private Boolean active;
     private String bio;
     private List<String> roles;
+    private SpeakerDetailsResponseDTO speakerDetails;
+    private ListenerDetailsResponseDTO listenerDetails;
+    private OrganizerDetailsResponseDTO organizerDetails;
 
 
     public Long getId() {
@@ -79,4 +79,27 @@ public class UserResponseDTO  implements Serializable {
     }
 
 
+    public SpeakerDetailsResponseDTO getSpeakerDetails() {
+        return speakerDetails;
+    }
+
+    public void setSpeakerDetails(SpeakerDetailsResponseDTO speakerDetails) {
+        this.speakerDetails = speakerDetails;
+    }
+
+    public ListenerDetailsResponseDTO getListenerDetails() {
+        return listenerDetails;
+    }
+
+    public void setListenerDetails(ListenerDetailsResponseDTO listenerDetails) {
+        this.listenerDetails = listenerDetails;
+    }
+
+    public OrganizerDetailsResponseDTO getOrganizerDetails() {
+        return organizerDetails;
+    }
+
+    public void setOrganizerDetails(OrganizerDetailsResponseDTO organizerDetails) {
+        this.organizerDetails = organizerDetails;
+    }
 }
