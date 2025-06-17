@@ -1,7 +1,9 @@
 package br.edu.ifgoiano.Empreventos.service;
 
+import br.edu.ifgoiano.Empreventos.dto.response.ListenerDetailsResponseDTO;
 import br.edu.ifgoiano.Empreventos.dto.response.OrganizerDetailsResponseDTO;
 import br.edu.ifgoiano.Empreventos.mapper.DataMapper;
+import br.edu.ifgoiano.Empreventos.mapper.OrganizerDetailsMapper;
 import br.edu.ifgoiano.Empreventos.model.OrganizerDetails;
 import br.edu.ifgoiano.Empreventos.repository.UserRepository;
 import br.edu.ifgoiano.Empreventos.repository.OrganizerDetailsRepository;
@@ -12,16 +14,27 @@ import br.edu.ifgoiano.Empreventos.dto.request.OrganizerDetailsRequestDTO;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 
 @Service
 public class OrganizerDetailsService {
 
-    @Autowired
-    private OrganizerDetailsRepository organizerDetailsRepository;
+    private final OrganizerDetailsRepository organizerDetailsRepository;
+    private final UserRepository userRepository;
+    private final OrganizerDetailsMapper organizerDetailsMapper;
+    private final Logger logger = Logger.getLogger(SpeakerDetailsService.class.getName());
+
 
     @Autowired
-    private UserRepository userRepository;
+    public OrganizerDetailsService(OrganizerDetailsRepository organizerDetailsRepository,
+                                   UserRepository userRepository, OrganizerDetailsMapper organizerDetailsMapper) {
+        this.organizerDetailsRepository = organizerDetailsRepository;
+        this.userRepository = userRepository;
+        this.organizerDetailsMapper = organizerDetailsMapper;
+    }
+
 
     public OrganizerDetailsRequestDTO create (OrganizerDetailsRequestDTO organizerDetailsRequestDTO) {
         var user = userRepository.findById(organizerDetailsRequestDTO.getUser_id())
@@ -65,6 +78,13 @@ public class OrganizerDetailsService {
 
         var savedOrganizerDetails = organizerDetailsRepository.save(organizerDetails);
         return DataMapper.parseObject(savedOrganizerDetails, OrganizerDetailsRequestDTO.class);
+    }
+
+    public List<OrganizerDetailsResponseDTO> findAll() {
+        logger.info("Buscando todos os participantes");
+        return organizerDetailsRepository.findAll().stream()
+                .map(organizerDetailsMapper::toResponseDTO)
+                .collect(Collectors.toList());
     }
 }
 

@@ -2,11 +2,14 @@ package br.edu.ifgoiano.Empreventos.controller;
 
 import br.edu.ifgoiano.Empreventos.dto.request.OrganizerDetailsRequestDTO;
 import br.edu.ifgoiano.Empreventos.dto.response.OrganizerDetailsResponseDTO;
+import br.edu.ifgoiano.Empreventos.dto.response.SpeakerDetailsResponseDTO;
 import br.edu.ifgoiano.Empreventos.service.OrganizerDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/organizers")
@@ -33,5 +36,11 @@ public class OrganizerDetailsController {
         organizerDetailsService.delete(userId);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping
+    public List<OrganizerDetailsResponseDTO> findAll() {
+        return organizerDetailsService.findAll();
+    }
+
 
 }
