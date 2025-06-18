@@ -3,6 +3,7 @@ package br.edu.ifgoiano.Empreventos.controller;
 import br.edu.ifgoiano.Empreventos.dto.request.UserRequestDTO;
 import br.edu.ifgoiano.Empreventos.dto.response.UserResponseDTO;
 import br.edu.ifgoiano.Empreventos.model.Role;
+import br.edu.ifgoiano.Empreventos.security.jwt.UserDetailsImpl;
 import br.edu.ifgoiano.Empreventos.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -84,6 +85,26 @@ public class UserController {
     public UserResponseDTO update(@PathVariable Long id,
                                   @Valid @RequestBody UserRequestDTO userRequestDTO) {
         return userService.update(id, userRequestDTO);
+    }
+
+    @PutMapping("/me")
+    @PreAuthorize("isAuthenticated()")
+    @Operation(summary = "Atualizar os próprios dados do usuário logado", description = "Permite que o usuário autenticado atualize seus próprios dados de perfil.")
+    @SecurityRequirement(name = "bearerAuth")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Dados do usuário atualizados com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos"),
+            @ApiResponse(responseCode = "401", description = "Não autenticado")
+    })
+    public UserResponseDTO updateMyDetails(@AuthenticationPrincipal UserDetails currentUser,
+                                           @Valid @RequestBody UserRequestDTO userRequestDTO) {
+
+        if (currentUser instanceof UserDetailsImpl) {
+            Long userId = ((UserDetailsImpl) currentUser).getId();
+            return userService.update(userId, userRequestDTO);
+        }
+
+        throw new IllegalArgumentException("Não foi possível obter o ID do usuário autenticado.");
     }
 
     @DeleteMapping("/{id}")

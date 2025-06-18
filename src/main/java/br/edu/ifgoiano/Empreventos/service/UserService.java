@@ -87,6 +87,15 @@ public class UserService {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Usuário com ID " + id + " não encontrado"));
 
+        userRequestDTO.setCpf_cnpj(null);
+        if (userRequestDTO.getEmail() != null && !userRequestDTO.getEmail().equals(existingUser.getEmail())) {
+            if (userRepository.existsByEmail(userRequestDTO.getEmail())) {
+                throw new IllegalArgumentException("Email '" + userRequestDTO.getEmail() + "' já está em uso por outro usuário.");
+            }
+        }
+        if (userRequestDTO.getPassword() != null && !userRequestDTO.getPassword().isEmpty()) {
+            existingUser.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
+        }
         userMapper.updateEntityFromDTO(userRequestDTO, existingUser);
         existingUser.setUpdated_at(new Date());
 
@@ -107,6 +116,17 @@ public class UserService {
         user.setActive(false);
         user.setDeleted_at(new Date());
         userRepository.save(user);
+    }
+
+    // Método de validação para CRIAÇÃO de usuário
+    private void validateUserCreation(UserRequestDTO userRequestDTO) {
+        if (userRepository.existsByEmail(userRequestDTO.getEmail())) {
+            throw new IllegalArgumentException("Email já está em uso");
+        }
+
+        if (userRequestDTO.getRoles() == null || userRequestDTO.getRoles().isEmpty()) {
+            throw new IllegalArgumentException("Pelo menos uma role deve ser especificada");
+        }
     }
 
     // Métodos auxiliares privados
