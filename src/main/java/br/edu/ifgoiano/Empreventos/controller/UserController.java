@@ -62,6 +62,7 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Usuário encontrado"),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
+            @ApiResponse(responseCode = "401", description = "Não autenticado"),
             @ApiResponse(responseCode = "403", description = "Acesso negado")
     })
     public UserResponseDTO findById(@PathVariable Long id) {
@@ -70,6 +71,16 @@ public class UserController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
+    @Operation(summary = "Atualizar detalhes do usuário", description = "Permite a um ADMIN atualizar qualquer usuário ou um usuário comum atualizar seus próprios dados.")
+    @SecurityRequirement(name = "bearerAuth")
+    @Parameter(name = "id", description = "ID do usuário a ser atualizado", required = true, example = "1")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos"),
+            @ApiResponse(responseCode = "401", description = "Não autenticado"),
+            @ApiResponse(responseCode = "403", description = "Acesso negado"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+    })
     public UserResponseDTO update(@PathVariable Long id,
                                   @Valid @RequestBody UserRequestDTO userRequestDTO) {
         return userService.update(id, userRequestDTO);
@@ -78,6 +89,15 @@ public class UserController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
+    @Operation(summary = "Deletar um usuário", description = "Permite a um ADMIN deletar qualquer usuário ou um usuário comum deletar sua própria conta (exclusão lógica).")
+    @SecurityRequirement(name = "bearerAuth")
+    @Parameter(name = "id", description = "ID do usuário a ser deletado", required = true, example = "1")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Usuário deletado com sucesso (No Content)"),
+            @ApiResponse(responseCode = "401", description = "Não autenticado"),
+            @ApiResponse(responseCode = "403", description = "Acesso negado"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+    })
     public void delete(@PathVariable Long id) {
         userService.delete(id);
     }
@@ -85,6 +105,12 @@ public class UserController {
     // Endpoint para o usuário logado obter seus próprios detalhes completos
     @GetMapping("/me")
     @PreAuthorize("isAuthenticated()") // Apenas exige que o usuário esteja autenticado
+    @Operation(summary = "Obter detalhes do usuário logado", description = "Retorna os detalhes do perfil do usuário atualmente autenticado.")
+    @SecurityRequirement(name = "bearerAuth")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Detalhes do usuário logado retornados com sucesso"),
+            @ApiResponse(responseCode = "401", description = "Não autenticado")
+    })
     public UserResponseDTO getMyDetails(@AuthenticationPrincipal UserDetails currentUser) {
         // userDetails é injetado automaticamente pelo Spring Security com as informações do usuário logado
         return userService.findCurrentUserDetails(currentUser);
@@ -93,6 +119,11 @@ public class UserController {
     // Endpoints específicos para tipos de usuário
     @PostMapping("/speakers")
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Registrar um novo palestrante", description = "Permite registrar um novo usuário com a role de PALESTRANTE (SPEAKER).")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Palestrante registrado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos ou email já em uso")
+    })
     public UserResponseDTO createSpeaker(@Valid @RequestBody UserRequestDTO userRequestDTO) {
         userRequestDTO.setRoles(Set.of(Role.RoleName.SPEAKER));
         return userService.registerUser(userRequestDTO);
@@ -100,6 +131,11 @@ public class UserController {
 
     @PostMapping("/listeners")
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Registrar um novo participante", description = "Permite registrar um novo usuário com a role de PARTICIPANTE (LISTENER).")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Participante registrado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos ou email já em uso")
+    })
     public UserResponseDTO createListener(@Valid @RequestBody UserRequestDTO userRequestDTO) {
         userRequestDTO.setRoles(Set.of(Role.RoleName.LISTENER));
         return userService.registerUser(userRequestDTO);
@@ -107,6 +143,11 @@ public class UserController {
 
     @PostMapping("/organizers")
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Registrar um novo organizador", description = "Permite registrar um novo usuário com a role de ORGANIZADOR.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Organizador registrado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos ou email já em uso")
+    })
     public UserResponseDTO createOrganizer(@Valid @RequestBody UserRequestDTO userRequestDTO) {
         userRequestDTO.setRoles(Set.of(Role.RoleName.ORGANIZER));
         return userService.registerUser(userRequestDTO);
